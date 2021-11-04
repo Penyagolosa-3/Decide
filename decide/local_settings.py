@@ -20,7 +20,7 @@ APIS = {
     'census': 'http://localhost:8000',
     'mixnet': 'http://localhost:8000',
     'postproc': 'http://localhost:8000',
-    'store': 'http://localhost:8000'',
+    'store': 'http://localhost:8000',
     'visualizer': 'http://localhost:8000',
     'voting': 'http://localhost:8000',
 }
@@ -30,7 +30,7 @@ BASEURL = 'http://localhost:8000'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
+        'NAME': 'decide',
         'USER': 'decide',
         'PASSWORD': 'decide',
         'HOST': '127.0.0.1',
