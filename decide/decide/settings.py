@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '^##ydkswfu0+=ofw0l#$kv^8n)0$i(qd&d&ol#p9!b$8*5%j1+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -121,10 +121,10 @@ WSGI_APPLICATION = 'decide.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd9k0cu1rtpjq09',
-        'USER': 'aadmjtiqvdltdv',
-        'PASSWORD': '88bbce7f4e921bee0c13387a490c9f9c017ed510aeba36c1c7b99612425c59c7',
-        'HOST': 'ec2-52-17-1-206.eu-west-1.compute.amazonaws.com',
+        'NAME': 'decide',
+        'USER': 'decide',
+        'PASSWORD': 'decide',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
