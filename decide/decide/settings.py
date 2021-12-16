@@ -70,14 +70,7 @@ MODULES = [
     'voting',
 ]
 
-BASEURL = 'https://decide-penyagolosa.herokuapp.com/'
-
-APIS = {
-
-}
-
-import django_heroku
-django_heroku.settings(locals())
+BASEURL = 'http://localhost:8000'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
