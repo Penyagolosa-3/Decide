@@ -1,1 +1,1 @@
-web: gunicorn decide-penyagolosa.wsgi --log-file -
+web: gunicorn decide.wsgi --log-file -
