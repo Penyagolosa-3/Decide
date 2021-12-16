@@ -70,19 +70,14 @@ MODULES = [
     'voting',
 ]
 
-BASEURL = 'https://decide-penyagolosa.herokuapp.com'
+BASEURL = 'https://decide-penyagolosa.herokuapp.com/'
 
 APIS = {
-    'authentication': 'http://localhost:8000',
-    'base': 'http://localhost:8000',
-    'booth': 'http://localhost:8000',
-    'census': 'http://localhost:8000',
-    'mixnet': 'http://localhost:8000',
-    'postproc': 'http://localhost:8000',
-    'store': 'http://localhost:8000',
-    'visualizer': 'http://localhost:8000',
-    'voting': 'http://localhost:8000',
+
 }
+
+import django_heroku
+django_heroku.settings(locals())
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -192,6 +187,3 @@ if os.path.exists("config.jsonnet"):
 
 
 INSTALLED_APPS = INSTALLED_APPS + MODULES
-
-import django_heroku
-django_heroku.settings(locals())
