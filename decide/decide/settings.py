@@ -70,7 +70,7 @@ MODULES = [
     'voting',
 ]
 
-BASEURL = 'https://decide-penyagolosa.herokuapp.com'
+BASEURL = 'decide-penyagolosa.herokuapp.com'
 
 APIS = {
     'authentication': 'http://localhost:8000',
