@@ -1,5 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Visualizer</title>
+        <meta charset="UTF-8">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.2/dist/chart.min.js"></script>
+    </head>
+
 {% extends "base.html" %}
 {% load i18n static %}
+
 
 {% block extrahead %}
     <link type="text/css" rel="stylesheet"
@@ -22,7 +31,7 @@
             <h2 v-if="!voting.start_date">Votación no comenzada</h2>
             <h2 v-else-if="!voting.end_date">Votación en curso</h2>
             <div v-else>
-                <h2 class="heading">Resultados:</h2>
+                <h2 class="heading">Resultadoss:</h2>
 
                 <table class="table table-bordered table-striped">
                     <thead>
@@ -52,15 +61,89 @@
     <script src="https://unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
     <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
 
+    <canvas id="myChart" width="100" height="100"></canvas>
+    <style>
+        #myChart {
+            width:1800px !important;
+            height:500px !important;
+        }
+    </style>
     <script>
         var voting = {{voting|safe}};
+        console.log(voting);
         var app = new Vue({
             delimiters: ['[[', ']]'],
             el: '#app-visualizer',
             data: {
                 voting: voting
             }
-        })
+        });
+
+        function getRandom(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        var postproc = voting.postproc;
+        var question = voting.question.desc;
+        var labels = [];
+        var votes = [];
+        var colours = ['rgba(46, 204, 113,1.0)', 'rgba(230, 126, 34,1.0)', 'rgba(155, 89, 182,1.0)',
+         'rgba(241, 196, 15,1.0)', 'rgba(52, 152, 219,1.0)', 'rgba(127, 140, 141,1.0)']
+
+        for(let p of postproc){
+            labels.push(p.option);
+            votes.push(p.votes);
+        }
+        var options = {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    ticks:{
+                        font:{
+                            size:20
+                        }
+                    }
+                },
+                x:{
+                    ticks:{
+                        font:{
+                            size:30
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend:{
+                    labels: {
+                        font:{
+                            size: 30
+                        }
+                    }
+                }
+            }
+        }
+
+        var ctx = document.getElementById("myChart").getContext("2d");
+        var myChart = new Chart(ctx, {
+        type:"bar",
+        data:{
+            labels:labels,
+            datasets:[{
+                    label: question,
+                    data:votes,
+                    backgroundColor: colours,
+                    borderColor: colours,
+                    borderWidth: 1
+            }]
+        },
+        options
+       });
     </script>
+
+
+
+
 </body>
+</html>
 {% endblock %}
