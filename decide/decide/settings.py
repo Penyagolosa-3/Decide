@@ -69,18 +69,18 @@ MODULES = [
     'voting',
 ]
 
-BASEURL = 'decide-penyagolosa.herokuapp.com'
+BASEURL = 'https://decide-penyagolosa.herokuapp.com'
 
 APIS = {
-    'authentication': 'decide-penyagolosa.herokuapp.com',
-    'base': 'decide-penyagolosa.herokuapp.com',
-    'booth': 'decide-penyagolosa.herokuapp.com',
-    'census': 'decide-penyagolosa.herokuapp.com',
-    'mixnet': 'decide-penyagolosa.herokuapp.com',
-    'postproc': 'decide-penyagolosa.herokuapp.com',
-    'store': 'decide-penyagolosa.herokuapp.com',
-    'visualizer': 'decide-penyagolosa.herokuapp.com',
-    'voting': 'decide-penyagolosa.herokuapp.com',
+    'authentication': BASEURL,
+    'base': BASEURL,
+    'booth': BASEURL,
+    'census': BASEURL,
+    'mixnet': BASEURL,
+    'postproc': BASEURL,
+    'store': BASEURL,
+    'visualizer': BASEURL,
+    'voting': BASEURL,
 }
 
 MIDDLEWARE = [
