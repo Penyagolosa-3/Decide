@@ -25,8 +25,7 @@ SECRET_KEY = '^##ydkswfu0+=ofw0l#$kv^8n)0$i(qd&d&ol#p9!b$8*5%j1+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -70,12 +69,19 @@ MODULES = [
     'voting',
 ]
 
-BASEURL = 'https://decide-penyagolosa.herokuapp.com/'
+BASEURL = 'decide-penyagolosa.herokuapp.com'
 
-APIS = {}
-
-import django_heroku
-django_heroku.settings(locals())
+APIS = {
+    'authentication': 'http://localhost:8000',
+    'base': 'http://localhost:8000',
+    'booth': 'http://localhost:8000',
+    'census': 'http://localhost:8000',
+    'mixnet': 'http://localhost:8000',
+    'postproc': 'http://localhost:8000',
+    'store': 'http://localhost:8000',
+    'visualizer': 'http://localhost:8000',
+    'voting': 'http://localhost:8000',
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -114,10 +120,10 @@ WSGI_APPLICATION = 'decide.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'decide',
-        'USER': 'decide',
-        'PASSWORD': 'decide',
-        'HOST': 'localhost',
+        'NAME': 'd9k0cu1rtpjq09',
+        'USER': 'aadmjtiqvdltdv',
+        'PASSWORD': '88bbce7f4e921bee0c13387a490c9f9c017ed510aeba36c1c7b99612425c59c7',
+        'HOST': 'ec2-52-17-1-206.eu-west-1.compute.amazonaws.com',
         'PORT': '5432',
     }
 }
@@ -185,3 +191,6 @@ if os.path.exists("config.jsonnet"):
 
 
 INSTALLED_APPS = INSTALLED_APPS + MODULES
+
+import django_heroku
+django_heroku.settings(locals())
