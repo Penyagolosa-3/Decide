@@ -72,15 +72,15 @@ MODULES = [
 BASEURL = 'decide-penyagolosa.herokuapp.com'
 
 APIS = {
-    'authentication': 'http://localhost:8000',
-    'base': 'http://localhost:8000',
-    'booth': 'http://localhost:8000',
-    'census': 'http://localhost:8000',
-    'mixnet': 'http://localhost:8000',
-    'postproc': 'http://localhost:8000',
-    'store': 'http://localhost:8000',
-    'visualizer': 'http://localhost:8000',
-    'voting': 'http://localhost:8000',
+    'authentication': 'https://decide-penyagolosa.herokuapp.com',
+    'base': 'https://decide-penyagolosa.herokuapp.com',
+    'booth': 'https://decide-penyagolosa.herokuapp.com',
+    'census': 'https://decide-penyagolosa.herokuapp.com',
+    'mixnet': 'https://decide-penyagolosa.herokuapp.com',
+    'postproc': 'https://decide-penyagolosa.herokuapp.com',
+    'store': 'https://decide-penyagolosa.herokuapp.com',
+    'visualizer': 'https://decide-penyagolosa.herokuapp.com',
+    'voting': 'https://decide-penyagolosa.herokuapp.com',
 }
 
 MIDDLEWARE = [
