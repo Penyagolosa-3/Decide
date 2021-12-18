@@ -18,6 +18,12 @@ class PostProcView(APIView):
 
     def groups(self, options):
 
+        """
+            * Definición: Agrupa cada opción segun su grupo de votación
+            * Entrada: Json de la votación
+            * Salida: Diccionario cuya llave son los grupos de votación y el valor listas de opciones
+        """
+
         groups = set()
         grpOptions = {}
 
@@ -37,6 +43,12 @@ class PostProcView(APIView):
 
     
     def borda(self, options):
+
+        """
+            * Definicion: Aplica el algoritmo de recuento Borda
+            * Entrada: Json de la votación
+            * Salida: Lista de candidatos con un nuevo parámetro que supone el valor de sus votos tras aplicar borda
+        """
 
         # Comprobamos que las opciones tienen el atributo groups, habiendo al menos 2 opciones
         if(len(options) < 2):
