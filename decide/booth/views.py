@@ -27,6 +27,17 @@ class BoothVotingCountView(APIView):
 
         return Response({})
 
+    def get(self, request, voting_id):
+        #print(voting_id)
+        #voting = Voting.objects.get(id=voting_id)
+        votingCount = VotingCount.objects.filter(voting_id=voting_id)
+        #print(votingCount.count())
+        context = {
+            'votingCount': votingCount.values()
+        }
+        data = json.dumps(context, indent=4, sort_keys=False, default=str)
+        return Response(data, content_type='application/json')
+
 # TODO: check permissions and census
 class BoothView(TemplateView):
     template_name = 'booth/booth.html'
