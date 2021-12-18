@@ -59,6 +59,48 @@
             el: '#app-visualizer',
             data: {
                 voting: voting
+            },
+            beforeMount() {
+                this.init();
+            },
+            methods: {
+                init() {
+                    var cookies = document.cookie.split("; ");
+                    cookies.forEach((c) => {
+                        var cs = c.split("=");
+                        if (cs[0] == 'decide' && cs[1]) {
+                            this.token = cs[1];
+                            this.getUser();
+                        }
+                    });
+                },
+                getData(url) {
+                    // Default options are marked with *
+                    var fdata = {
+                        headers: {
+                            'content-type': 'application/json',
+                        },
+                        method: 'GET',
+                    };
+
+                    if (this.token) {
+                        fdata.headers['Authorization'] = 'Token ' + this.token;
+                    }
+
+                    return fetch(url, fdata)
+                        .then(response => {
+                            if (response.status === 200) {
+                                return response.json();
+                            } else {
+                                return Promise.reject(response.statusText);
+                            }
+                        });
+                },
+                getVotingCount() {
+                    this.getData(`{% url "gateway" "booth" "/votingCount/" %}${this.voting.id}`).then(data => {
+                        console.log(data);
+                    });
+                }
             }
         })
     </script>
