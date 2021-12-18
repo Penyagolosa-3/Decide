@@ -1,3 +1,5 @@
+import os
+
 ALLOWED_HOSTS = ["*"]
 
 # Modules in use, commented modules that you won't use
@@ -20,7 +22,7 @@ APIS = {
     'census': 'http://localhost:8000',
     'mixnet': 'http://localhost:8000',
     'postproc': 'http://localhost:8000',
-    'store': 'http://localhost:8000'',
+    'store': 'http://localhost:8000',
     'visualizer': 'http://localhost:8000',
     'voting': 'http://localhost:8000',
 }
@@ -40,3 +42,30 @@ DATABASES = {
 
 # number of bits for the key, all auths should use the same number of bits
 KEYBITS = 256
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.sites',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.microsoft',
+    'allauth.socialaccount.providers.azure',
+
+
+
+]
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
+)
+SITE_ID = 3
+
+LOGIN_REDIRECT_URL = '/'
+
