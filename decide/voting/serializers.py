@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from . import validator
 from .models import Question, QuestionOption, Voting
 from base.serializers import KeySerializer, AuthSerializer
 
@@ -19,6 +19,7 @@ class QuestionSerializer(serializers.HyperlinkedModelSerializer):
 
 class VotingSerializer(serializers.HyperlinkedModelSerializer):
     question = QuestionSerializer(many=False)
+    validator.lofensivo(question.Meta.fields[1])
     pub_key = KeySerializer()
     auths = AuthSerializer(many=True)
 

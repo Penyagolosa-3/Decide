@@ -1,3 +1,4 @@
+from . import validator
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.db.models.signals import post_save
@@ -30,7 +31,7 @@ class QuestionOption(models.Model):
 
 class Voting(models.Model):
     name = models.CharField(max_length=200)
-    desc = models.TextField(blank=True, null=True)
+    desc = models.TextField(blank=True, null=True, validators=[validator.lofensivo])
     question = models.ForeignKey(Question, related_name='voting', on_delete=models.CASCADE)
 
     start_date = models.DateTimeField(blank=True, null=True)

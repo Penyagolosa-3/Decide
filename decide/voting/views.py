@@ -1,6 +1,9 @@
+from . import validator
+from django import forms
 import django_filters.rest_framework
 from django.conf import settings
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
 from rest_framework.response import Response
@@ -33,8 +36,13 @@ class VotingView(generics.ListCreateAPIView):
             if not data in request.data:
                 return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
+        self.queryset.desc= forms.FieldView(validators=[validator.lofensivo])
         question = Question(desc=request.data.get('question'))
+        
+        desc = forms.TextField(validators=[validator.lofensivo])
+
         question.save()
+
         for idx, q_opt in enumerate(request.data.get('question_opt')):
             opt = QuestionOption(question=question, option=q_opt, number=idx)
             opt.save()
