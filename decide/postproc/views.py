@@ -33,6 +33,23 @@ class PostProcView(APIView):
                 # Añadimos a todas las opciones el atributo 'total'
                 opt['total'] = 0
         
+            #Agrupamos las opciones según el grupo de votación al que pertenezcan
+            grp = self.group(options)
+            res = []
+
+            #Ordenamos las opciones según el número de votos
+            for g in grp:
+                lista = sorted(grp[g], key = lambda x:x["votes"])
+                votosTotales = 0
+
+                #Obtenemos la suma todos los votos
+                for lis in lista:
+                    votosTotales +=  lis["votes"]
+                
+                
+
+
+        
 
     def post(self, request):
         """
