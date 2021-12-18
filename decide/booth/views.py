@@ -6,12 +6,24 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from .models import VotingCount
+from voting.models import Voting, QuestionOption
+
 from base import mods
 
 class BoothVotingCountView(APIView):
     def post(self, request):
         print(request.data)
 
+        for data in ['option', 'voting']:
+            if not data in request.data:
+                return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+        voting = Voting.objects.get(id=int(request.data.get('voting')))
+        option = QuestionOption.objects.get(id=int(request.data.get('option')))
+
+        votingCount = VotingCount(voting = voting, option = option)
+        votingCount.save()
 
         return Response({})
 
