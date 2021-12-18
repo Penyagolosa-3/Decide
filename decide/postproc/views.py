@@ -18,7 +18,22 @@ class PostProcView(APIView):
 
     def groups(self, options):
 
+        groups = set()
+        grpOptions = {}
+
+        # Obtención de grupos
+        for opt in options:
+            groups.add(opt["group"])
         
+        # Inicialización de lista de opciones
+        for group in groups:
+            grpOptions[group] = []
+        
+        # Categorización de opciones por grupo
+        for opt in options:
+            grpOptions[opt.get("group")].append(opt)
+        
+        return grpOptions
 
     
     def borda(self, options):
@@ -58,9 +73,7 @@ class PostProcView(APIView):
             # Tras aplicar el algoritmo, se ordenan las opciones según su puntuación total
             res.sort(key=lambda x:x['total'], reverse=True)
 
-        return Response(res)
-
-        
+        return Response(res) 
 
     def post(self, request):
         """
