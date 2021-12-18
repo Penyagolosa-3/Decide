@@ -1,4 +1,4 @@
-from . import validator
+from . import validators
 from django import forms
 import django_filters.rest_framework
 from django.conf import settings
@@ -36,11 +36,7 @@ class VotingView(generics.ListCreateAPIView):
             if not data in request.data:
                 return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
-        self.queryset.desc= forms.FieldView(validators=[validator.lofensivo])
         question = Question(desc=request.data.get('question'))
-        
-        desc = forms.TextField(validators=[validator.lofensivo])
-
         question.save()
 
         for idx, q_opt in enumerate(request.data.get('question_opt')):

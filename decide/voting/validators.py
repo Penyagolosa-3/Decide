@@ -23,13 +23,12 @@ def lofensivo(value):
 
     porcentaje=0.15
     cont = 0
+    res= False
 
     for palabra in palabras:
         if(palabra in lsofensiva):
             cont+=1
         
     if(cont/len(palabras)>porcentaje):
-        raise ValidationError(("Se ha encontrado lenguaje ofensivo en la pregunta"), params={"palabras": palabras} )
-
-
-##print(lofensivo(value))
+        res=True
+    return res
