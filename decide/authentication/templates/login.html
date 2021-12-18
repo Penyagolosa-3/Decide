@@ -1,0 +1,7 @@
+{% load socialaccount %}
+{% providers_media_js %}
+<a class="fab fa-microsoft size_social text-info" aria-hidden="true" href="{% provider_login_url "microsoft" %}">microsoft</a>
+
+{% if user.is_authenticated %}
+estoy autenticado
+{% endif %}
