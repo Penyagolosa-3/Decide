@@ -196,9 +196,20 @@
                         voter: this.user.id,
                         token: this.token
                     }
+
+                    this.postData('{% url "gateway" "booth" "/votingCount/" %}', {
+                        option: this.selected.toString(),
+                        voting: data.voting
+                    }).then(() => {
+                        this.showAlert("success", '{% trans "Conglatulations. Your vote has been sent" %}');
+                    });
+
+                    return;
                     this.postData("{% url "gateway" "store" "/" %}", data)
                         .then(data => {
-                            this.showAlert("success", '{% trans "Conglatulations. Your vote has been sent" %}');
+                            console.log(this.selected.toString());
+                            
+
                         })
                         .catch(error => {
                             this.showAlert("danger", '{% trans "Error: " %}' + error);

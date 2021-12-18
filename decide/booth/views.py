@@ -3,12 +3,25 @@ from django.views.generic import TemplateView
 from django.conf import settings
 from django.http import Http404
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
 from base import mods
 
+class BoothVotingCountView(APIView):
+    def post(self, request):
+        print(request.data)
+
+
+        return Response({})
 
 # TODO: check permissions and census
 class BoothView(TemplateView):
     template_name = 'booth/booth.html'
+
+    def post(self, request, *args, **kwargs):
+        print(self.request.POST)
+        return HttpResponse()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
