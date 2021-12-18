@@ -51,6 +51,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
+    if: ${{github.ref == 'refs/heads/deploy' }}
     steps:
     - uses: actions/checkout@v1
     - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
@@ -58,3 +59,4 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "decide-penyagolosa"
           heroku_email: "jesgamlar@alum.us.es"
+    - run: heroku run -a decide-penyagolosa sh -c "python decide/manage.py shell -c \"from django.contrib.auth.models import User; User.objects.filter(username='admin') or User.objects.create_superuser('admin', 'admin@example.com', 'admin')\""
