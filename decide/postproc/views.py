@@ -37,8 +37,8 @@ class PostProcView(APIView):
             grp = self.group(options)
             res = []
 
-            #Ordenamos las opciones según el número de votos
             for g in grp:
+                #Ordenamos las opciones según el número de votos
                 lista = sorted(grp[g], key = lambda x:x["votes"])
                 votosTotales = 0
 
@@ -46,8 +46,19 @@ class PostProcView(APIView):
                 for lis in lista:
                     votosTotales +=  lis["votes"]
                 
-                
+                contador = 1
 
+                # Se aplica el algoritmo de borda
+                for l in lista:
+                    puntuacion = votosTotales * contador
+                    l['total'] = puntuacion
+                    res.append(l)
+                    contador += 1
+                
+            # Tras aplicar el algoritmo, se ordenan las opciones según su puntuación total
+            res.sort(key=lambda x:x['total'], reverse=True)
+
+        return Response(res)
 
         
 
