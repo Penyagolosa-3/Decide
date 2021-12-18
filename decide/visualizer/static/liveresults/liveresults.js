@@ -1,6 +1,10 @@
 (($) => {
     console.log(voting);
-    app.getVotingCount();
+    app.getVotingCount().then(data => {
+        console.log(data);
+
+        
+    });
     setInterval(() => {
         console.log(`Refrescando resultados de la votación: ${voting.id}`);
         //app.getVotingCount();

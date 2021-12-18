@@ -97,9 +97,7 @@
                         });
                 },
                 getVotingCount() {
-                    this.getData(`{% url "gateway" "booth" "/votingCount/" %}${this.voting.id}`).then(data => {
-                        console.log(data);
-                    });
+                    return this.getData(`{% url "gateway" "booth" "/votingCount/" %}${this.voting.id}`);
                 }
             }
         })

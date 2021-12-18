@@ -9,6 +9,8 @@ from rest_framework.response import Response
 from .models import VotingCount
 from voting.models import Voting, QuestionOption
 
+from .serializers import VotingCountSerializer
+
 from base import mods
 
 class BoothVotingCountView(APIView):
@@ -32,11 +34,7 @@ class BoothVotingCountView(APIView):
         #voting = Voting.objects.get(id=voting_id)
         votingCount = VotingCount.objects.filter(voting_id=voting_id)
         #print(votingCount.count())
-        context = {
-            'votingCount': votingCount.values()
-        }
-        data = json.dumps(context, indent=4, sort_keys=False, default=str)
-        return Response(data, content_type='application/json')
+        return Response(VotingCountSerializer(votingCount, many=True).data)
 
 # TODO: check permissions and census
 class BoothView(TemplateView):
