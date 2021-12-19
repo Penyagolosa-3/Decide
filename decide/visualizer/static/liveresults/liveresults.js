@@ -1,4 +1,4 @@
-(($) => {
+(() => {
     class VotingCount {
         constructor(options) {
             this.options = options;
@@ -56,4 +56,4 @@
             votingCount.putOptionsValues(data);
         });
     }, 1000);
-})(jQuery);
+})();
