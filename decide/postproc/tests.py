@@ -44,6 +44,16 @@ class PostProcTestCase(APITestCase):
         self.assertEqual(values, expected_result)
     
     def test_borda(self):
+        """
+            * Definicion: Test que verifica que el algoritmo borda funciona correctamente
+            * Entrada: Votación
+                - Number: id de la opción
+                - Option: nombre de la opción
+                - Votes: Número de votos que recibe en la votación
+                - Group: Grupo de votación al que pertenece
+            * Salida: los datos de entrada con un nuevo parámetro llamado total
+            que supone el valor de esa opción tras aplicar el algoritmo
+        """        
         data = {
             "type": "BORDA",	
             "options": [
