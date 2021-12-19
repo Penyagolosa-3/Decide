@@ -25,7 +25,7 @@ SECRET_KEY = '^##ydkswfu0+=ofw0l#$kv^8n)0$i(qd&d&ol#p9!b$8*5%j1+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -197,4 +197,4 @@ NOSE_ARGS = [
 ]
 
 import django_heroku
-django_heroku.settings(locals())
+django_heroku.settings(locals(),test_runner=False)
