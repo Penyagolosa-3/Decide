@@ -201,19 +201,14 @@
                         option: this.selected.toString(),
                         voting: data.voting
                     }).then(() => {
-                        this.showAlert("success", '{% trans "Conglatulations. Your vote has been sent" %}');
-                    });
-
-                    return;
-                    this.postData("{% url "gateway" "store" "/" %}", data)
+                        this.postData("{% url "gateway" "store" "/" %}", data)
                         .then(data => {
-                            console.log(this.selected.toString());
-                            
-
+                            this.showAlert("success", '{% trans "Conglatulations. Your vote has been sent" %}');
                         })
                         .catch(error => {
                             this.showAlert("danger", '{% trans "Error: " %}' + error);
                         });
+                    });
                 },
                 showAlert(lvl, msg) {
                     this.alertLvl = lvl;
