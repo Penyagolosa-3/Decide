@@ -61,7 +61,7 @@ class PostProcView(APIView):
                 opt['total'] = 0
         
             #Agrupamos las opciones según el grupo de votación al que pertenezcan
-            grp = self.group(options)
+            grp = self.groups(options)
             res = []
 
             for g in grp:
