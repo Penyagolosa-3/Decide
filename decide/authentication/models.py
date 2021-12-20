@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from django.db import models
 from enum import Enum
 
@@ -10,5 +9,3 @@ class Rol(Enum):
 class Roll(models.Model):
     user_id = models.PositiveIntegerField()
     rol = Rol
-    
-    
