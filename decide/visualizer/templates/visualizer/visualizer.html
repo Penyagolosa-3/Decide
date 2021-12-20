@@ -80,7 +80,7 @@
             height:500px !important;
         }
         #myChart3 {
-            width:1800px !important;
+            width:1000px !important;
             height:500px !important;
         }
     </style>
@@ -239,36 +239,32 @@
             }
         }
        });
+       var fechas = [];
        app.getVotingCount().then(data => {
-           console.log(data);
            console.log(new Date(data[0].created_at));
-        })
-    
-
-       var ctx = document.getElementById("myChart3").getContext("2d");
-       var myChart3 = new Chart(ctx, {
+           for(let p of data){
+            fechas.push(new Date(p.created_at));
+        }
+        console.log(fechas[0]);
+        var ctx = document.getElementById("myChart3").getContext("2d");
+        var myChart3 = new Chart(ctx, {
            type: 'bar',
            data:{
-               labels:['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'],
+               labels:fechas,
                datasets:[{
                    label:question,
-                   data:[],
+                   data:votes,
                    backgroundColor: colours,
                }]
            },
-           options:{
-               responsive: true,
-               maintainAspectRatio: false,
-
-               plugins:{
-                   legend:{
-                       font:{
-                           size:40
-                       }
-                   }
-               }
-           }
+           options
        });
+
+
+        })
+    
+
+       
 
     </script>
 
