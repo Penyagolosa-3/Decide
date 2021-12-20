@@ -15,12 +15,12 @@
                     }
                 }
             }
-            console.log(this.options);
             app.setOptions(this.options);
             app.$forceUpdate();
         }
         categorizeVotingCount(votingCount) {
             let categorized = [];
+
             for(let v of votingCount) {
                 let option_id = v.option_id,
                     found = false;
@@ -30,7 +30,7 @@
 
                     if(c.option_id==option_id) {
                         found = true;
-                        c.value++;
+                        c.count++;
                     }
                 }
                 if(!found) {
@@ -50,10 +50,10 @@
 
     setInterval(() => {
         console.log(`Refrescando resultados de la votación: ${voting.id}`);
-
+        
         app.getVotingCount().then(data => {
-            console.log(data);
             votingCount.putOptionsValues(data);
         });
+
     }, 1000);
 })();

@@ -110,7 +110,8 @@
         })
     </script>
 
-    <script src="{% static 'liveresults/liveresults.js' %}" v-else-if="!voting.end_date"></script>
-
+    {% if voting.end_date == null %}
+    <script src="{% static 'liveresults/liveresults.js' %}" v-if="!voting.end_date"></script>
+    {% endif %}
 </body>
 {% endblock %}
