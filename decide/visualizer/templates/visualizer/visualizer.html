@@ -24,6 +24,9 @@
                 Votación en curso: Información en vivo de votos realizados
                 <ul>
                     <li v-for="opt in voting.question.options" :key="opt.number">[[ opt.option ]]: [[ opt.votingCount ]]</li>
+                </ul>
+
+                Votos totales: <span>[[ totalVotes ]]</span>
             </div>
             <div v-else>
                 <h2 class="heading">Resultados:</h2>
@@ -62,7 +65,8 @@
             delimiters: ['[[', ']]'],
             el: '#app-visualizer',
             data: {
-                voting: voting
+                voting: voting,
+                totalVotes: 0
             },
             beforeMount() {
                 this.init();
@@ -80,6 +84,9 @@
                 },
                 setOptions(options) {
                     this.voting.question.options = options;
+                },
+                setTotalVotes(votes) {
+                    this.totalVotes = votes;
                 },
                 getData(url) {
                     // Default options are marked with *
@@ -104,14 +111,14 @@
                         });
                 },
                 getVotingCount() {
-                    return this.getData(`{% url "gateway" "booth" "/votingCount/" %}${this.voting.id}`);
+                    return this.getData(`{% url "gateway" "booth" "/votingCount/" %}${this.voting.id}/`);
                 }
             }
         })
     </script>
 
     {% if voting.end_date == null %}
-    <script src="{% static 'liveresults/liveresults.js' %}" v-if="!voting.end_date"></script>
+    <script src="{% static 'liveresults/liveresults.js' %}"></script>
     {% endif %}
 </body>
 {% endblock %}
