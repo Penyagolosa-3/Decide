@@ -9,6 +9,11 @@ from .models import Question, QuestionOption, Voting
 from .serializers import SimpleVotingSerializer, VotingSerializer
 from base.perms import UserIsStaff
 from base.models import Auth
+from voting.models import *
+from django.http import HttpResponse
+import json
+from django.core import serializers
+
 
 
 class VotingView(generics.ListCreateAPIView):
