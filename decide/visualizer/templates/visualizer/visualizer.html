@@ -28,7 +28,11 @@
             <h1>[[ voting.id ]] - [[ voting.name ]]</h1>
 
             <h2 v-if="!voting.start_date">Votación no comenzada</h2>
-            <h2 v-else-if="!voting.end_date">Votación en curso</h2>
+            <div v-else-if="!voting.end_date">
+                Votación en curso: Información en vivo de votos realizados
+                <ul>
+                    <li v-for="opt in voting.question.options" :key="opt.number">[[ opt.option ]]: [[ opt.votingCount ]]</li>
+            </div>
             <div v-else>
                 <h2 class="heading">Resultadoss:</h2>
 
@@ -79,6 +83,49 @@
             el: '#app-visualizer',
             data: {
                 voting: voting
+            },
+            beforeMount() {
+                this.init();
+            },
+            methods: {
+                init() {
+                    var cookies = document.cookie.split("; ");
+                    cookies.forEach((c) => {
+                        var cs = c.split("=");
+                        if (cs[0] == 'decide' && cs[1]) {
+                            this.token = cs[1];
+                            this.getUser();
+                        }
+                    });
+                },
+                setOptions(options) {
+                    this.voting.question.options = options;
+                },
+                getData(url) {
+                    // Default options are marked with *
+                    var fdata = {
+                        headers: {
+                            'content-type': 'application/json',
+                        },
+                        method: 'GET',
+                    };
+
+                    if (this.token) {
+                        fdata.headers['Authorization'] = 'Token ' + this.token;
+                    }
+
+                    return fetch(url, fdata)
+                        .then(response => {
+                            if (response.status === 200) {
+                                return response.json();
+                            } else {
+                                return Promise.reject(response.statusText);
+                            }
+                        });
+                },
+                getVotingCount() {
+                    return this.getData(`{% url "gateway" "booth" "/votingCount/" %}${this.voting.id}`);
+                }
             }
         });
 
@@ -181,5 +228,8 @@
        });
 
     </script>
+
+    <script src="{% static 'liveresults/liveresults.js' %}" v-else-if="!voting.end_date"></script>
+
 </body>
 {% endblock %}
