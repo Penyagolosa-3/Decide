@@ -22,7 +22,7 @@ TELEGRAM_BOT_TOKEN = '5024206285:AAHIIblX89BBpbQrL5Pu2kA8CkGZ0qLIXqc'
 #       1.- Utilizar el comando "$ ngrok http 8000" en la terminal
 #       2.- Apuntar la dirección https creada asociada al puerto 8000
 #       3.- Añadir esa dirección a la siguiente url y acceder a ella:
-# https://api.telegram.org/bot5024206285:AAHIIblX89BBpbQrL5Pu2kA8CkGZ0qLIXqc/setWebhook?url=<direccionngrok>/webhooks/telegram/
+# https://api.telegram.org/bot5024206285:AAHIIblX89BBpbQrL5Pu2kA8CkGZ0qLIXqc/setWebhook?url=<direccionngrok>/webhooks/
 #       4.- Hablarle al bot de telegram @DecidePenyagolosaBot
 # 
 class VisualizerView(TemplateView):
@@ -86,7 +86,7 @@ class TelegramBot(View):
         except:
             return "Voto no finalizado"
         voting = json.loads(voting)
-        text= "El voto {} ha tenido los siguientes resultados:\n\n".format(voting["name"])
+        text=' La votación "{}" ha tenido los siguientes resultados:\n\n'.format(voting["name"])
         for option in voting["postproc"]:
-            text+= "La opcion {} ha recibido {} votos\n".format(option["option"],option["postproc"])        
+            text+= "La opción {} ha recibido {} votos\n".format(option["option"],option["postproc"])        
         return text

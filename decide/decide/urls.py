@@ -26,7 +26,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('doc/', schema_view),
     path('gateway/', include('gateway.urls')),
-    path('webhooks/telegram/', csrf_exempt(TelegramBot.as_view())),
+    path('webhooks/', csrf_exempt(TelegramBot.as_view())),
     #path('webhooks/discord/', csrf_exempt(TelegramBot.as_view())),
 ]
 
