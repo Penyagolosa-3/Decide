@@ -1,7 +1,3 @@
-
-import os
-
-
 ALLOWED_HOSTS = ["*"]
 
 # Modules in use, commented modules that you won't use
