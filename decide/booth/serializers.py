@@ -6,4 +6,4 @@ from .models import VotingCount
 class VotingCountSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = VotingCount
-        fields = ('id', 'voting_id', 'option_id')
+        fields = ('id', 'voting_id', 'option_id', 'created_at')

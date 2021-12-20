@@ -239,6 +239,11 @@
             }
         }
        });
+       app.getVotingCount().then(data => {
+           console.log(data);
+           console.log(new Date(data[0].created_at));
+        })
+    
 
        var ctx = document.getElementById("myChart3").getContext("2d");
        var myChart3 = new Chart(ctx, {
