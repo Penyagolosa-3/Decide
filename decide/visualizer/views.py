@@ -48,6 +48,7 @@ class TelegramBot(View):
 
         try:
             text = t_message["text"].strip().lower()
+            print(text)
         except Exception as e:
             return JsonResponse({"ok": "POST request processed"})
 
@@ -56,7 +57,12 @@ class TelegramBot(View):
             rtext = "Usa el comando /visualizer <id> - para consultar una votación"
             self.send_message(rtext, t_chat["id"])
         if command=="visualizer":
-            votingid = text.lstrip("/").split()[1]
+            try:
+                votingid = text.lstrip("/").split()[1]
+            
+            except Exception as e:
+                return JsonResponse({"ok": "POST request processed"})
+                
             if votingid.isnumeric():
                 rtext = self.returndb(votingid)
             else:
@@ -75,7 +81,7 @@ class TelegramBot(View):
             "parse_mode": "Markdown",
         }
         response = requests.post(
-            f"{TELEGRAM_URL}{TELEGRAM_BOT_TOKEN}/sendMessage", data=data
+            "{}{}/sendMessage".format(TELEGRAM_URL,TELEGRAM_BOT_TOKEN), data=data
         )
 
     @staticmethod
