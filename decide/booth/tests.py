@@ -71,7 +71,7 @@ class BoothTestCase(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         # Pasamos la respuesta a json y comparamos con la esperada
-        values = response.json()
+        values = response.json()['votingCount']
         for val in values:
             val.pop('created_at')
             
