@@ -1,7 +1,6 @@
-
 from django.db import models
 
-class Rol(models.Model):
+class Authentication(models.Model):
     # Constants in Model class
     CLIENTE = 'CL'
     VENDEDOR = 'SH'
