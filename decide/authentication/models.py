@@ -1,3 +1,4 @@
+
 from django.db import models
 
 class Rol(models.Model):
@@ -13,3 +14,4 @@ class Rol(models.Model):
         choices=CHOICES,
         default=CLIENTE,
     )
+
