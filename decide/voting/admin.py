@@ -1,11 +1,10 @@
 from django.contrib import admin
 from django.utils import timezone
 
-from .models import QuestionOption
-from .models import Question
-from .models import Voting
+from .models import *
 
 from .filters import StartedFilter
+
 
 
 def start(modeladmin, request, queryset):
@@ -48,3 +47,4 @@ class VotingAdmin(admin.ModelAdmin):
 
 admin.site.register(Voting, VotingAdmin)
 admin.site.register(Question, QuestionAdmin)
+
