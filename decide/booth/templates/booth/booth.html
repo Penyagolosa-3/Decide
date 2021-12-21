@@ -87,6 +87,9 @@
 
     <script>
         var voting = {{voting|safe}};
+
+        console.log('{% url "gateway" "authentication" "/login/" %}');
+
         var app = new Vue({
             delimiters: ['[[', ']]'],
             el: '#app-booth',
@@ -193,13 +196,19 @@
                         voter: this.user.id,
                         token: this.token
                     }
-                    this.postData("{% url "gateway" "store" "/" %}", data)
+
+                    this.postData('{% url "gateway" "booth" "/votingCount/" %}', {
+                        option: this.selected.toString(),
+                        voting: data.voting
+                    }).then(() => {
+                        this.postData("{% url "gateway" "store" "/" %}", data)
                         .then(data => {
                             this.showAlert("success", '{% trans "Conglatulations. Your vote has been sent" %}');
                         })
                         .catch(error => {
                             this.showAlert("danger", '{% trans "Error: " %}' + error);
                         });
+                    });
                 },
                 showAlert(lvl, msg) {
                     this.alertLvl = lvl;

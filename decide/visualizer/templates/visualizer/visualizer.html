@@ -20,7 +20,14 @@
             <h1>[[ voting.id ]] - [[ voting.name ]]</h1>
 
             <h2 v-if="!voting.start_date">Votación no comenzada</h2>
-            <h2 v-else-if="!voting.end_date">Votación en curso</h2>
+            <div v-else-if="!voting.end_date">
+                Votación en curso: Información en vivo de votos realizados
+                <ul>
+                    <li v-for="opt in voting.question.options" :key="opt.number">[[ opt.option ]]: [[ opt.votingCount ]]</li>
+                </ul>
+
+                Votos totales: <span>[[ totalVotes ]]</span>
+            </div>
             <div v-else>
                 <h2 class="heading">Resultados:</h2>
 
@@ -58,9 +65,190 @@
             delimiters: ['[[', ']]'],
             el: '#app-visualizer',
             data: {
-                voting: voting
+                voting: voting,
+                totalVotes: 0
+            },
+            beforeMount() {
+                this.init();
+            },
+            methods: {
+                init() {
+                    var cookies = document.cookie.split("; ");
+                    cookies.forEach((c) => {
+                        var cs = c.split("=");
+                        if (cs[0] == 'decide' && cs[1]) {
+                            this.token = cs[1];
+                            this.getUser();
+                        }
+                    });
+                },
+                setOptions(options) {
+                    this.voting.question.options = options;
+                },
+                setTotalVotes(votes) {
+                    this.totalVotes = votes;
+                },
+                getData(url) {
+                    // Default options are marked with *
+                    var fdata = {
+                        headers: {
+                            'content-type': 'application/json',
+                        },
+                        method: 'GET',
+                    };
+
+                    if (this.token) {
+                        fdata.headers['Authorization'] = 'Token ' + this.token;
+                    }
+
+                    return fetch(url, fdata)
+                        .then(response => {
+                            if (response.status === 200) {
+                                return response.json();
+                            } else {
+                                return Promise.reject(response.statusText);
+                            }
+                        });
+                },
+                getVotingCount() {
+                    return this.getData(`{% url "gateway" "booth" "/votingCount/" %}${this.voting.id}/`);
+                }
             }
+        });
+
+        var postproc = voting.postproc;
+        var question = voting.question.desc;
+        var labels = [];
+        var votes = [];
+        var colours = ['rgba(46, 204, 113,1.0)', 'rgba(230, 126, 34,1.0)', 'rgba(155, 89, 182,1.0)',
+         'rgba(241, 196, 15,1.0)', 'rgba(52, 152, 219,1.0)', 'rgba(127, 140, 141,1.0)']
+
+        for(let p of postproc){
+            labels.push(p.option);
+            votes.push(p.votes);
+        }
+        var options = {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    ticks:{
+                        font:{
+                            size:20
+                        }
+                    }
+                },
+                x:{
+                    ticks:{
+                        font:{
+                            size:30
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend:{
+                    labels: {
+                        font:{
+                            size: 30
+                        }
+                    }
+                }
+            }
+        }
+
+
+        var options2 = {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 40
+                        }
+                    }
+                }
+            }
+   }
+
+        var ctx = document.getElementById("myChart").getContext("2d");
+        var myChart = new Chart(ctx, {
+        type:"bar",
+        data:{
+            labels:labels,
+            datasets:[{
+                    label: question,
+                    data:votes,
+                    backgroundColor: colours,
+                    borderColor: colours,
+                    borderWidth: 1
+            }]
+        },
+        options
+       });
+
+       var ctx = document.getElementById("myChart2").getContext("2d");
+        var myChart2 = new Chart(ctx, {
+        type:"pie",
+        data:{
+            labels:labels,
+            datasets:[{
+                    label: question,
+                    data:votes,
+                    backgroundColor: colours,
+            }]
+        },
+        options:{
+            responsive: true,
+            maintainAspectRatio: false,
+            
+            plugins: {
+                legend:{
+                    labels: {
+                        font:{
+                            size: 40
+                        }
+                    }
+                }
+            }
+        }
+       });
+       app.getVotingCount().then(data => {
+           console.log(data);
+           console.log(new Date(data[0].created_at));
         })
+    
+
+       var ctx = document.getElementById("myChart3").getContext("2d");
+       var myChart3 = new Chart(ctx, {
+           type: 'bar',
+           data:{
+               labels:['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'],
+               datasets:[{
+                   label:question,
+                   data:[],
+                   backgroundColor: colours,
+               }]
+           },
+           options:{
+               responsive: true,
+               maintainAspectRatio: false,
+
+               plugins:{
+                   legend:{
+                       font:{
+                           size:40
+                       }
+                   }
+               }
+           }
+       });
+
     </script>
+
+    {% if voting.end_date == null %}
+    <script src="{% static 'liveresults/liveresults.js' %}"></script>
+    {% endif %}
 </body>
 {% endblock %}
