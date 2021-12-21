@@ -133,6 +133,19 @@ class PostProcView(APIView):
                         i['paridad'].append(listaH[h])
                         h = h + 1
                     paridad = False
+                 else:
+                    
+                    if h < len(listaHombres):
+                        i['paridad'].append(listaHombres[h])
+                        h = h + 1
+                   
+                    else:
+                        i['paridad'].append(listaMujeres[m])
+                        m = m + 1
+                    paridad = True
+
+                escanios -= 1
+        return out
 
     def post(self, request):
         """
