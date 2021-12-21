@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.sites',
     'django.contrib.staticfiles',
 
     'corsheaders',
@@ -46,14 +47,13 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'gateway',
 
+
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.microsoft',
     'allauth.socialaccount.providers.azure',
-
-
-
+    'allauth.socialaccount.providers.google',
 
 ]
 
@@ -204,12 +204,23 @@ if os.path.exists("config.jsonnet"):
 
 INSTALLED_APPS = INSTALLED_APPS + MODULES
 
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
+)
+
+SITE_ID = 2
+
+LOGIN_REDIRECT_URL = '/'
+
 NOSE_ARGS = [
     '--with-xunit'
 ]
 
 import django_heroku
 django_heroku.settings(locals(),test_runner=False)
+
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',

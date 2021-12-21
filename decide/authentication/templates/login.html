@@ -1,6 +1,9 @@
 {% load socialaccount %}
 {% providers_media_js %}
+
 <a class="fab fa-microsoft size_social text-info" aria-hidden="true" href="{% provider_login_url "microsoft" %}">microsoft</a>
+<a class="fab fa-google size_social text-info" aria-hidden="true" href="{% provider_login_url "google" %}">Google</a>
+
 
 {% if user.is_authenticated %}
 estoy autenticado
