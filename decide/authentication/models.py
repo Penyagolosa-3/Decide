@@ -5,13 +5,13 @@ class Rol(models.Model):
     # Constants in Model class
     CLIENTE = 'CL'
     VENDEDOR = 'SH'
-    CHOICES = (
+    USERTYPES = (
         (CLIENTE, 'CL'),
         (VENDEDOR, 'SH'),
     )
-    year_in_school = models.CharField(
-        max_length=2,
-        choices=CHOICES,
+    usertypes = models.CharField(
+        max_length=1,
+        choices=USERTYPES,
         default=CLIENTE,
     )
 
