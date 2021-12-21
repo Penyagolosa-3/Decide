@@ -1,12 +1,15 @@
 from django.db import models
-from django.utils.translation import gettext_lazy as _
-
-# Create your models here.
 
 class Rol(models.Model):
-
-    class State(models.IntegerChoices):
-        CLIENT= 0, _('Cliente')
-        SHELLER = 1, _('Vendedor')
-
-    state = models.IntegerField(default=State.CLIENT, choices=State.choices)
+    # Constants in Model class
+    CLIENTE = 'CL'
+    VENDEDOR = 'SH'
+    CHOICES = (
+        (CLIENTE, 'CL'),
+        (VENDEDOR, 'SH'),
+    )
+    year_in_school = models.CharField(
+        max_length=2,
+        choices=CHOICES,
+        default=CLIENTE,
+    )
