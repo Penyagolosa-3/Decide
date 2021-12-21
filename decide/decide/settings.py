@@ -32,6 +32,8 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.sites',
+
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -43,6 +45,16 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework_swagger',
     'gateway',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.microsoft',
+    'allauth.socialaccount.providers.azure',
+
+
+
+
 ]
 
 REST_FRAMEWORK = {
@@ -198,3 +210,12 @@ NOSE_ARGS = [
 
 import django_heroku
 django_heroku.settings(locals(),test_runner=False)
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
+)
+SITE_ID = 3
+
+LOGIN_REDIRECT_URL = '/'
+
