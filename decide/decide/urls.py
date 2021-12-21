@@ -25,8 +25,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('doc/', schema_view),
     path('gateway/', include('gateway.urls')),
-    path('login/',TemplateView.as_view(template_name="login.html")),
-    path('accounts/',include('allauth.urls')),
 ]
 
 for module in settings.MODULES:

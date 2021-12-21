@@ -219,12 +219,3 @@ NOSE_ARGS = [
 import django_heroku
 django_heroku.settings(locals(),test_runner=False)
 
-
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend'
-)
-SITE_ID = 3
-
-LOGIN_REDIRECT_URL = '/'
-

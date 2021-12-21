@@ -6,11 +6,10 @@ from django.contrib import admin
 from .views import GetUserView, LogoutView, RegisterView
 
 urlpatterns = [
-    path('login/', obtain_auth_token),
+  #  path('login/', obtain_auth_token),
     path('logout/', LogoutView.as_view()),
     path('getuser/', GetUserView.as_view()),
     path('register/', RegisterView.as_view()),
-    path('',TemplateView.as_view(template_name="login.html")),
-    path('admin/', admin.site.urls),
+    path('login/',TemplateView.as_view(template_name="login.html")),
     path('accounts/',include('allauth.urls')),
 ]
