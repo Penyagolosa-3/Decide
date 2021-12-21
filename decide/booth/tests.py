@@ -64,11 +64,15 @@ class BoothTestCase(APITestCase):
         ]
 
         # Se solicita el recuento de votos a la url añadiendo el id de la votación
-        response = self.client.get('/booth/votingCount/'+str(self.voting.id)+'/', format='json')
+        response = self.client.get('/booth/votingCount/'+str(self.voting.id)+'/', format='json')        
+
 
         # Si en el endpoint se recibe id de opción y de votación, la respuesta http debería ser 200
         self.assertEqual(response.status_code, 200)
 
         # Pasamos la respuesta a json y comparamos con la esperada
         values = response.json()
+        for val in values:
+            val.pop('created_at')
+            
         self.assertEqual(values, expected_result)
