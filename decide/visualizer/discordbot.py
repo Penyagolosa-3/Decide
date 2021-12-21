@@ -6,7 +6,7 @@ from base import mods
 from dotenv import load_dotenv
 from discord import Webhook,RequestsWebhookAdapter
 
-TOKEN = "OTIyMjgxOTIyNDAxNTQyMTU2.Yb_L-Q.MXDVlPSfZdKMZc2gtFPJsC674qw"
+TOKEN = os.getenv('DISCORD_TOKEN')
 #webhook_url = "https://discord.com/api/webhooks/922301093755633664/PIOHdcWk1OWIjwgdX9QPDntGR9zzrKYpyxy3iecQYUCovs9onMI6tCuCweKov1SYD9_K"
 #webhook_id = "922301093755633664"
 #webhook_token = "PIOHdcWk1OWIjwgdX9QPDntGR9zzrKYpyxy3iecQYUCovs9onMI6tCuCweKov1SYD9_K"
@@ -34,7 +34,6 @@ async def on_message(message):
     
 def devuelveBaseDeDatos(voting_id):
     try:
-        print(voting_id)
         r = mods.get('voting', params={'id': voting_id})
         voting = json.dumps(r[0])
     except:
