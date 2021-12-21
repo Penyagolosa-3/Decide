@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models import CheckConstraint
 from django.db.models.query_utils import Q
 from django.utils.translation import gettext_lazy as _
 # Create your models here.
@@ -7,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 class Authentication(models.Model):
 
     class Rol(models.TextChoices):
-        SELLER = 'SL', _('Sheller')
+        SELLER = 'SE', _('Sheller')
         CLIENT= 'CL', _('Client')
 
     roles = models.CharField(
@@ -18,7 +17,7 @@ class Authentication(models.Model):
     
     
     class Meta:
-        constraints = [CheckConstraint(check=Q(roles__in=['Sheller', 'Client']), name="valid_roles")]
+        constraints = Q[models.CheckConstraint(check=Q(roles__in=['Sheller', 'Client']), name="valid_roles")]
 
 
 
