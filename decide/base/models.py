@@ -28,6 +28,20 @@ class Auth(models.Model):
     def __str__(self):
         return self.url
 
+class Rol(models.Model):
+    # Constants in Model class
+    CLIENTE = 'CL'
+    VENDEDOR = 'SH'
+    USERTYPES = (
+        (CLIENTE, 'CL'),
+        (VENDEDOR, 'SH'),
+    )
+    usertypes = models.CharField(
+        max_length=1,
+        choices=USERTYPES,
+        default=CLIENTE,
+    )
+
 
 class Key(models.Model):
     p = BigBigField()
