@@ -29,8 +29,10 @@
          * Entrada: un fetch de la tabla VotingCount
          * Salida: Ninguna
          */
-        putOptionsValues(votingCountFetch) {
-            let categorizedVoting = this.categorizeVotingCount(votingCountFetch);
+        putOptionsValues(fetch) {
+            let categorizedVoting = this.categorizeVotingCount(fetch.votingCount);
+
+            console.log(categorizedVoting);
             for(let v of categorizedVoting) {
                 let option_id = v.option_id,
                     found = false;
@@ -43,6 +45,7 @@
             }
             this.app.setOptions(this.options);
             this.app.setTotalVotes(this.totalVotes);
+            this.app.setCensus(fetch.census);
             this.app.$forceUpdate();
         }
 

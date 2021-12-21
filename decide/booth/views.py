@@ -8,6 +8,8 @@ from rest_framework.response import Response
 
 from .models import VotingCount
 from voting.models import Voting, QuestionOption
+from census.models import Census
+from store.models import Vote
 
 from .serializers import VotingCountSerializer
 
@@ -25,11 +27,19 @@ class BoothVotingCountView(APIView):
             if not data in request.data:
                 return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
-        voting = Voting.objects.get(id=int(request.data.get('voting')))
-        option = QuestionOption.objects.get(id=int(request.data.get('option')))
+        voting_id = int(request.data.get('voting'))
 
-        votingCount = VotingCount(voting = voting, option = option)
-        votingCount.save()
+        # Comprobamos que no exista una votación anterior del mismo usuario
+        votes = Vote.objects.filter(voting_id=voting_id, voter_id=request.user.id)
+
+        if len(votes)==0:
+            voting = Voting.objects.get(id=voting_id)
+            option = QuestionOption.objects.get(id=int(request.data.get('option')))
+
+            votingCount = VotingCount(voting = voting, option = option)
+            votingCount.save()
+        else:
+            print('El usuario ya ha votado antes. Omitiendo voto')
 
         return Response({})
 
@@ -39,11 +49,13 @@ class BoothVotingCountView(APIView):
     ## id: id de la votación
     # Salida: matriz con el fetch de los votos realizados a una votación
     def get(self, request, voting_id):
-        #print(voting_id)
-        #voting = Voting.objects.get(id=voting_id)
         votingCount = VotingCount.objects.filter(voting_id=voting_id)
-        #print(votingCount.count())
-        return Response(VotingCountSerializer(votingCount, many=True).data)
+
+        census = Census.objects.filter(voting_id=voting_id)
+
+        votingCount.census = len(census)
+
+        return Response({'votingCount': VotingCountSerializer(votingCount, many=True).data, 'census': len(census)})
 
 # TODO: check permissions and census
 class BoothView(TemplateView):

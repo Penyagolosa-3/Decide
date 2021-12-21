@@ -35,6 +35,32 @@
                 </ul>
 
                 Votos totales: <span>[[ totalVotes ]]</span>
+                Censo: <span>[[ census ]]</span>
+                Restante: <span>[[ census - totalVotes ]]</span>
+
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Opción</th>
+                            <th>Porcentaje</th>
+                            <th>Votos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="opt in voting.question.options" :key="opt.number" :key="opt.number">
+                            <th>[[opt.option]]</th>
+                            <td>[[ (((opt.votingCount ?? 0) * 100)/census) ]]%</td>
+                            <td class="text-muted">[[opt.votingCount ?? 0]]</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Votos realizados: [[ totalVotes ]]</th>
+                            <th>Censo: [[ census ]]</th>
+                            <th>Votos restantes: [[ census - totalVotes ]]</th>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
             <div v-else>
                 <h2 class="heading">Resultadoss:</h2>
@@ -95,7 +121,8 @@
             el: '#app-visualizer',
             data: {
                 voting: voting,
-                totalVotes: 0
+                totalVotes: 0,
+                census: 0
             },
             beforeMount() {
                 this.init();
@@ -116,6 +143,9 @@
                 },
                 setTotalVotes(votes) {
                     this.totalVotes = votes;
+                },
+                setCensus(census) {
+                    this.census = census;
                 },
                 getData(url) {
                     // Default options are marked with *
