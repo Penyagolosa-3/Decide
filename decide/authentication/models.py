@@ -1,11 +1,12 @@
 from django.db import models
-from enum import Enum
+from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
-class Rol(Enum):
-    Cliente = 1;
-    Vendedor = 2;
 
-class Roll(models.Model):
-    user_id = models.PositiveIntegerField()
-    rol = Rol
+class Rol(models.Model):
+
+    class State(models.IntegerChoices):
+        CLIENT= 0, _('Cliente')
+        SHELLER = 1, _('Vendedor')
+
+    state = models.IntegerField(default=State.CLIENT, choices=State.choices)
