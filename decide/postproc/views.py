@@ -87,6 +87,31 @@ class PostProcView(APIView):
 
         return Response(res) 
 
+    
+    def paridad(self, options):
+        """
+            * Definicion: Devuelve la lista candidatos intercalando hombres y mujeres si se cumple la paridad
+            * Entrada: Json de la votacion
+            * Salida: Lista de candidatos ordenada si hay paridad, mensaje de error si no hay paridad
+        """
+
+        out = []
+
+        for opt in options:
+            out.append({
+                **opt,
+                'paridad': [],
+            })
+
+        for i in out:
+            escanios = i['postproc']
+            candidatos = i['candidatos']
+            listaH = []
+            listaM = []
+            h = 0
+            m = 0
+            paridad = True
+
     def post(self, request):
         """
          * type: IDENTITY | EQUALITY | WEIGHT
