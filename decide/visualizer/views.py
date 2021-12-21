@@ -43,12 +43,10 @@ class VisualizerView(TemplateView):
 class TelegramBot(View):
     def post(self, request, *args, **kwargs):
         t_data = json.loads(request.body)
-        t_message = t_data["message"]
-        t_chat = t_message["chat"]
-
         try:
+            t_message = t_data["message"]
+            t_chat = t_message["chat"]
             text = t_message["text"].strip().lower()
-            print(text)
         except Exception as e:
             return JsonResponse({"ok": "POST request processed"})
 
@@ -93,6 +91,9 @@ class TelegramBot(View):
             return "Voto no finalizado"
         voting = json.loads(voting)
         text=' La votación "{}" ha tenido los siguientes resultados:\n\n'.format(voting["name"])
-        for option in voting["postproc"]:
-            text+= "La opción {} ha recibido {} votos\n".format(option["option"],option["postproc"])        
+        if voting["postproc"] == None:
+            return ' La votación "{}" no ha hecho el tally.'.format(voting["name"])
+        else: 
+            for option in voting["postproc"]:
+                text+= "La opción {} ha recibido {} votos\n".format(option["option"],option["postproc"])        
         return text
