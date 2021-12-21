@@ -112,6 +112,28 @@ class PostProcView(APIView):
             m = 0
             paridad = True
 
+            for candi in candidatos:
+                if candi['sexo'] == 'hombre':
+                    listaH.append(candi)
+                elif candi['sexo'] == 'mujer':
+                    listaM.append(candi)
+
+            check = self.checkPorcentajeParidad(listaH, listaM)
+
+            if not check:
+                out = {'message': 'No se cumplen los ratios de paridad 60%-40%'}
+                break
+
+            while escanios > 0:
+                if paridad:
+                    if m < len(listaM):
+                        i['paridad'].append(listaM[m])
+                        m = m + 1
+                    else:
+                        i['paridad'].append(listaH[h])
+                        h = h + 1
+                    paridad = False
+
     def post(self, request):
         """
          * type: IDENTITY | EQUALITY | WEIGHT
