@@ -135,17 +135,30 @@ class PostProcView(APIView):
                     paridad = False
                  else:
                     
-                    if h < len(listaHombres):
-                        i['paridad'].append(listaHombres[h])
+                    if h < len(listaH):
+                        i['paridad'].append(listaH[h])
                         h = h + 1
                    
                     else:
-                        i['paridad'].append(listaMujeres[m])
+                        i['paridad'].append(listaM[m])
                         m = m + 1
                     paridad = True
 
                 escanios -= 1
         return out
+
+    def checkPorcentajeParidad(self, hombres, mujeres):
+        """
+            * Definicion: Comprueba si se cumplen los porcentajes minimos de hombres y mujeres
+            * Entrada: Lista de hombres y de mujeres en la votacion
+            * Salida: True si se cumple la paridad, False si no se cumple
+        """
+        total = len(hombres)+len(mujeres)
+
+        porcentajeHombres = len(hombres)/total
+        porcentajeMujeres = len(mujeres)/total
+
+        return not (porcentajeMujeres < 0.4 or porcentajeHombres < 0.4)
 
     def post(self, request):
         """
