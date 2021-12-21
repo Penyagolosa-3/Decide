@@ -133,7 +133,7 @@ class PostProcView(APIView):
                         i['paridad'].append(listaH[h])
                         h = h + 1
                     paridad = False
-                 else:
+                else:
                     
                     if h < len(listaH):
                         i['paridad'].append(listaH[h])
@@ -180,5 +180,7 @@ class PostProcView(APIView):
             return self.identity(opts)
         elif t == 'BORDA':
             return self.borda(opts)
+        elif t == 'PARIDAD':
+            return Response(self.paridad(opts))
 
         return Response({})
