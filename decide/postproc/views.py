@@ -112,6 +112,7 @@ class PostProcView(APIView):
             m = 0
             paridad = True
 
+            # Almacenamos en dos listas los hombres y las mujeres
             for candi in candidatos:
                 if candi['sexo'] == 'hombre':
                     listaH.append(candi)
@@ -124,26 +125,33 @@ class PostProcView(APIView):
                 out = {'message': 'No se cumplen los ratios de paridad 60%-40%'}
                 break
 
+            # Recorremos todos los escanios disponibles
             while escanios > 0:
+                # Si existe paridad en ese momento
                 if paridad:
+                    # Si la cantidad de mujeres incluidas es menor que la cantidad de mujeres
                     if m < len(listaM):
                         i['paridad'].append(listaM[m])
                         m = m + 1
+                    # Si no, se aniade un hombre y se pone la paridad a False
                     else:
                         i['paridad'].append(listaH[h])
                         h = h + 1
                     paridad = False
+
+                # Si no existe paridad en ese momento
                 else:
-                    
+                    # Si el numero de hombres es menor que el numero de hombres en la lista, se aniade un hombre
                     if h < len(listaH):
                         i['paridad'].append(listaH[h])
                         h = h + 1
-                   
+                    # En caso contrario, se aniade una mujer y vuelve a existir paridad en la lista
                     else:
                         i['paridad'].append(listaM[m])
                         m = m + 1
                     paridad = True
 
+                # Cuenta regresiva de los escanios
                 escanios -= 1
         return out
 
