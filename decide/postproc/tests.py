@@ -104,4 +104,26 @@ class PostProcTestCase(APITestCase):
 
         response = self.client.post('/postproci/', data, format='json')
         self.assertEqual(response.status_code, 404)
+    
+    def testParidadCorrecto(self):
+        """
+            * Definicion: Test positivo para una votacion que cumple la paridad
+            * Entrada: Votacion (Json)
+                - Option: Nombre del partido
+                - Number: Id de la opcion
+                - Votes: Numero de votos de esa votacion
+                - PostProc: Numero de personas que van a ir en la lista una vez aplicada la paridad
+                - Candidatos: Sexo e ID de los candidatos
+            * Salida: Codigo 200 y json de la paridad
+        """
+        data = {
+            'type': 'PARIDAD',
+            'options': [
+                {'option': 'Partido Unico', 'number': 1, 'votes': 5, 'postproc': 5, 'candidatos': [
+                 {'sexo': 'hombre', 'id': '1'}, {'sexo': 'mujer', 'id': '2'}, {
+                     'sexo': 'hombre', 'id': '3'}, {'sexo': 'mujer', 'id': '4'}, {'sexo': 'mujer', 'id': '5'}
+                 ]}
+
+            ]
+        }
 
