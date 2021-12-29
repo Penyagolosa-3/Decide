@@ -137,3 +137,15 @@ class PostProcTestCase(APITestCase):
 
         values = response.json()
         self.assertEqual(values, expected_result)
+    
+    def test_bordaGrupoUnico(self):       
+        data = {
+            "type": "BORDA",	
+            "options": [
+                { "option": "Option 1", "number": 1, "votes": 10, "group":"g1" },
+                { "option": "Option 2", "number": 2, "votes": 7, "group":"g1" },
+                { "option": "Option 3", "number": 3, "votes": 8, "group":"g1" }
+                 ]
+        }
+
+         
