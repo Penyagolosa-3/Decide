@@ -201,3 +201,21 @@ class PostProcTestCase(APITestCase):
 
         values = response.json()
         self.assertEqual(values, expected_result)
+    
+    def test_bordaPos2(self):
+        data = {
+            "type": "BORDA",	
+            "options": [
+                { "option": "Option 1", "number": 1, "votes": 105, "group":"g1" },
+                { "option": "Option 2", "number": 2, "votes": 453, "group":"g1" },
+                { "option": "Option 3", "number": 3, "votes": 242, "group":"g1" },
+                { "option": "Option 1", "number": 4, "votes": 67, "group":"g2" },
+                { "option": "Option 2", "number": 5, "votes": 23, "group":"g2" },
+                { "option": "Option 3", "number": 6, "votes": 45, "group":"g2" },
+                { "option": "Option 1", "number": 7, "votes": 230, "group":"g3" },
+                { "option": "Option 2", "number": 8, "votes": 334, "group":"g3" },
+                { "option": "Option 3", "number": 9, "votes": 234, "group":"g3" }
+                
+            ]
+        }
+        
