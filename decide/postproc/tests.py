@@ -82,6 +82,16 @@ class PostProcTestCase(APITestCase):
         self.assertEqual(values, expected_result)
     
     def test_bordaWrongPath(self):
+        """
+            * Definición: Test que verifica que obtenemos un not found al realizar
+            un post a una página que no existe
+            * Entrada: Votación
+                - Number: id del partido
+                - Option: nombre de la opción
+                - Votes: Número de votos que recibe en la votación
+                - Group: Grupo de votación al que pertenece
+            * Salida: 404, not found
+        """        
         data = {
             "type": "BORDA",	
             "options": [
