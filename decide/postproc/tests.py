@@ -108,6 +108,16 @@ class PostProcTestCase(APITestCase):
         self.assertEqual(response.status_code, 404)
     
     def test_bordaNoType(self):
+        """
+            * Definición: Test donde no se especifica type en el json de entrada
+            * Entrada: Votación
+                - Number: id del partido
+                - Option: nombre de la opción
+                - Votes: Número de votos que recibe en la votación
+                - Group: Grupo de votación al que pertenece
+            * Salida: los datos de entrada tras aplicarle el type por defecto
+            (es decir, la función identity)
+        """        
         data = {	
             "options": [
                 { "option": "Option 1", "number": 1, "votes": 10, "group":"g1" },
@@ -117,9 +127,9 @@ class PostProcTestCase(APITestCase):
         }
 
         expected_result = [
-            { "option": "Option 2", "number": 1, "votes": 10, "group":"g1", "postproc":10},
-            { "option": "Option 1", "number": 3, "votes": 8, "group":"g1" , "postproc":8},
-            { "option": "Option 3", "number": 2, "votes": 7, "group":"g1" , "postproc":7} 
+            { "option": "Option 1", "number": 1, "votes": 10, "group":"g1", "postproc":10},
+            { "option": "Option 3", "number": 3, "votes": 8, "group":"g1" , "postproc":8},
+            { "option": "Option 2", "number": 2, "votes": 7, "group":"g1" , "postproc":7} 
             ]
 
         response = self.client.post("/postproc/", data, format="json")
