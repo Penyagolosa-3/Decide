@@ -106,3 +106,14 @@ class PostProcTestCase(APITestCase):
 
         response = self.client.post("/postprocesado/", data, format="json")
         self.assertEqual(response.status_code, 404)
+    
+    def test_bordaNoType(self):
+        data = {	
+            "options": [
+                { "option": "Option 1", "number": 1, "votes": 10, "group":"g1" },
+                { "option": "Option 2", "number": 2, "votes": 7, "group":"g1" },
+                { "option": "Option 3", "number": 3, "votes": 8, "group":"g1" }
+                ]
+        }
+
+        
