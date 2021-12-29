@@ -172,6 +172,16 @@ class PostProcTestCase(APITestCase):
         self.assertEqual(values, expected_result) 
     
     def test_bordaNoGroup(self):
+        """
+            * Definición: Test donde los votos no están agrupados
+            * Entrada: Votación
+                - Number: id del partido
+                - Option: Nombre de la opción
+                - Votes: Número de votos que recibe en la votación
+            * Salida: Mensaje de error, indicando que no es posible
+            agrupar los votos
+        """
+
         data = {
             "type": "BORDA",	
             "options": [
