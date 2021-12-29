@@ -45,7 +45,7 @@ class PostProcTestCase(APITestCase):
     
     def test_borda(self):
         """
-            * Definicion: Test que verifica que el algoritmo borda funciona correctamente
+            * Definición: Test que verifica que el algoritmo borda funciona correctamente
             * Entrada: Votación
                 - Number: id de la opción
                 - Option: nombre de la opción
@@ -80,3 +80,19 @@ class PostProcTestCase(APITestCase):
 
         values = response.json()
         self.assertEqual(values, expected_result)
+    
+    def test_bordaWrongPath(self):
+        data = {
+            "type": "BORDA",	
+            "options": [
+                { "option": "Option 1", "number": 1, "votes": 3, "group":"g1" },
+                { "option": "Option 2", "number": 2, "votes": 26, "group":"g1" },
+                { "option": "Option 3", "number": 3, "votes": 9, "group":"g1" },
+                { "option": "Option 1", "number": 4, "votes": 12, "group":"g2" },
+                { "option": "Option 2", "number": 5, "votes": 7, "group":"g2" },
+                { "option": "Option 3", "number": 6, "votes": 2, "group":"g2" }  
+            ]
+        }
+
+        response = self.client.post("/postprocesado/", data, format="json")
+        self.assertEqual(response.status_code, 404)
