@@ -48,10 +48,10 @@ class PostProcTestCase(APITestCase):
             * Definición: Test que verifica que el algoritmo borda funciona correctamente
             * Entrada: Votación
                 - Number: id de la opción
-                - Option: nombre de la opción
+                - Option: Nombre de la opción
                 - Votes: Número de votos que recibe en la votación
                 - Group: Grupo de votación al que pertenece
-            * Salida: los datos de entrada con un nuevo parámetro llamado total
+            * Salida: Los datos de entrada con un nuevo parámetro llamado total
             que supone el valor de esa opción tras aplicar el algoritmo
         """        
         data = {
@@ -87,7 +87,7 @@ class PostProcTestCase(APITestCase):
             un post a una página que no existe
             * Entrada: Votación
                 - Number: id del partido
-                - Option: nombre de la opción
+                - Option: Nombre de la opción
                 - Votes: Número de votos que recibe en la votación
                 - Group: Grupo de votación al que pertenece
             * Salida: 404, not found
@@ -112,10 +112,10 @@ class PostProcTestCase(APITestCase):
             * Definición: Test donde no se especifica type en el json de entrada
             * Entrada: Votación
                 - Number: id del partido
-                - Option: nombre de la opción
+                - Option: Nombre de la opción
                 - Votes: Número de votos que recibe en la votación
                 - Group: Grupo de votación al que pertenece
-            * Salida: los datos de entrada tras aplicarle el type por defecto
+            * Salida: Los datos de entrada tras aplicarle el type por defecto
             (es decir, la función identity)
         """        
         data = {	
@@ -138,7 +138,17 @@ class PostProcTestCase(APITestCase):
         values = response.json()
         self.assertEqual(values, expected_result)
     
-    def test_bordaGrupoUnico(self):       
+    def test_bordaGrupoUnico(self):
+        """
+            * Definición: Test donde solo existe un grupo de votación
+            * Entrada: Votación
+                - Number: id del partido
+                - Option: Nombre de la opcion
+                - Votes: Número de votos que recibe en la votación
+                - Group: Grupo de votación al que pertenece
+            * Salida: Los datos de entrada con un nuevo parámetro llamado total
+            que supone el valor de esa opción tras aplicar el algoritmo
+        """        
         data = {
             "type": "BORDA",	
             "options": [
