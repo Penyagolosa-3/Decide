@@ -1,6 +1,9 @@
+from . import validators
+from django import forms
 import django_filters.rest_framework
 from django.conf import settings
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
 from rest_framework.response import Response
@@ -9,6 +12,11 @@ from .models import Question, QuestionOption, Voting
 from .serializers import SimpleVotingSerializer, VotingSerializer
 from base.perms import UserIsStaff
 from base.models import Auth
+from voting.models import *
+from django.http import HttpResponse
+import json
+from django.core import serializers
+
 
 
 class VotingView(generics.ListCreateAPIView):
@@ -35,6 +43,7 @@ class VotingView(generics.ListCreateAPIView):
 
         question = Question(desc=request.data.get('question'))
         question.save()
+
         for idx, q_opt in enumerate(request.data.get('question_opt')):
             opt = QuestionOption(question=question, option=q_opt, number=idx)
             opt.save()
