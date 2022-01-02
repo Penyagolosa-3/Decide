@@ -69,7 +69,7 @@ MODULES = [
     'voting',
 ]
 
-BASEURL = 'https://decide-penyagolosa.herokuapp.com'
+BASEURL = 'https://decide-penyagolosa-3.herokuapp.com'
 
 APIS = {
     'authentication': BASEURL,
@@ -120,10 +120,10 @@ WSGI_APPLICATION = 'decide.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd9k0cu1rtpjq09',
-        'USER': 'aadmjtiqvdltdv',
-        'PASSWORD': '88bbce7f4e921bee0c13387a490c9f9c017ed510aeba36c1c7b99612425c59c7',
-        'HOST': 'ec2-52-17-1-206.eu-west-1.compute.amazonaws.com',
+        'NAME': 'd8k4jad1ha5rc1',
+        'USER': 'uhczrelzeornwa',
+        'PASSWORD': 'cc3dfc2bdb9e552e0ce3446120db9fcb4232a96593c350f08db29ba47048227a',
+        'HOST': 'ec2-52-208-221-89.eu-west-1.compute.amazonaws.com',
         'PORT': '5432',
     }
 }
