@@ -1,18 +1,34 @@
+from django.core.exceptions import ValidationError
+from . import validators
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
+from django.core.validators import MinValueValidator, MaxValueValidator
 from base import mods
 from base.models import Auth, Key
 
+class Detector(models.Model):
+    word = models.TextField()
+
+    def __str__(self):
+        return self.word
+
+class Percentage(models.Model):
+    number = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)])
+
+    def __str__(self):
+        return str(self.number)
 
 
 
 class Question(models.Model):
     desc = models.TextField()
-    binary_question = models.BooleanField(default=False,verbose_name="Answers Yes/No", help_text="Check the box to generate a binary question")
+    def clean(self):
+        if(validators.lofensivo(self.desc)):
+            raise ValidationError("Se ha detectado lenguaje ofensivo")
 
+    binary_question = models.BooleanField(default=False,verbose_name="Answers Yes/No", help_text="Check the box to generate a binary question")
     def __str__(self):
         return self.desc
 
@@ -41,7 +57,7 @@ class QuestionOption(models.Model):
 
 class Voting(models.Model):
     name = models.CharField(max_length=200)
-    desc = models.TextField(blank=True, null=True)
+    desc = models.TextField(blank=True, null=True, validators=[validators.lofensivo])
     question = models.ForeignKey(Question, related_name='voting', on_delete=models.CASCADE)
 
     start_date = models.DateTimeField(blank=True, null=True)
