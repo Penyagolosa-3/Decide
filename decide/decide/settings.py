@@ -79,6 +79,7 @@ MODULES = [
     'voting',
 ]
 
+
 BASEURL = 'https://decide-penyagolosa.herokuapp.com'
 
 APIS = {
@@ -92,6 +93,7 @@ APIS = {
     'visualizer': BASEURL,
     'voting': BASEURL,
 }
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
