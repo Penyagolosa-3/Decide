@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block content %}
+ <link rel="stylesheet" href="/static/css/style.css">
+<table>
+		<tr>
+		<th>Name</th>
+		<th>Start Date</th>
+		<th>Vote</th>
+		</tr>
+		
+		{% for v in votings %}
+			<tr>
+			<td>{{v.name}}</td>
+			{% if v.start_date is None %}
+			<td>It's not started</td>
+			{% else %}
+			<td>{{v.start_date}}</td>
+			{% endif %}
+			<td><a href='/booth/{{v.id}}/'>Vote</a></td>
+			</tr>
+		{% endfor %}
+		
+	</table>
+
+{% endblock %}

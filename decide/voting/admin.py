@@ -1,11 +1,14 @@
 from django.contrib import admin
 from django.utils import timezone
 
+
 from .models import Detector, Percentage, QuestionOption
 from .models import Question
 from .models import Voting
 
+
 from .filters import StartedFilter
+
 
 
 def start(modeladmin, request, queryset):
