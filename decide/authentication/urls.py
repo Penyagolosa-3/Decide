@@ -11,6 +11,5 @@ urlpatterns = [
     path('getuser/', GetUserView.as_view()),
     path('register/', RegisterView.as_view()),
     path('',TemplateView.as_view(template_name="login.html")),
-    path('admin/', admin.site.urls),
     path('accounts/',include('allauth.urls')),
 ]
