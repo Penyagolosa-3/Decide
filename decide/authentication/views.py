@@ -48,6 +48,7 @@ class RegisterView(APIView):
         try:
             user = User(username=username)
             user.set_password(pwd)
+            user = User
             user.save()
             token, _ = Token.objects.get_or_create(user=user)
         except IntegrityError:
