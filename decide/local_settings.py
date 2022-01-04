@@ -24,7 +24,7 @@ APIS = {
     'postproc': BASEURL,
     'store': BASEURL,
     'visualizer': BASEURL,
-    'voting': BASEURL,
+    'voting': BASEURL
 }
 
 DATABASES = {
