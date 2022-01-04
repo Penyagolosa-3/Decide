@@ -74,7 +74,9 @@ class AdminTestCase(StaticLiveServerTestCase):
         self.driver.switch_to_window(window_before)
         time.sleep(1)
         self.driver.find_element_by_xpath('/html/body/div/div[3]/div/form/div/div/input[1]').click()
-        time.sleep(20)
+        time.sleep(1)
+        self.assertTrue(len(self.driver.find_elements_by_xpath('//*[@id="result_list"]/tbody/tr'))==1)
+        time.sleep(2)
 
         #Iniciamos la votación
         self.driver.find_element_by_xpath('/html/body/div/div[3]/div/div/form/div[2]/table/tbody/tr[1]/td[1]/input').click()
@@ -95,6 +97,12 @@ class AdminTestCase(StaticLiveServerTestCase):
         time.sleep(1)
         self.driver.find_element_by_xpath('/html/body/div/div[3]/div/form/div/div/input[1]').click()
         time.sleep(1)
+        self.driver.find_element_by_link_text('Home').click()
+        self.driver.find_element_by_link_text('Users').click()
+        time.sleep(3)
+
+        self.assertTrue(len(self.driver.find_elements_by_xpath('//*[@id="result_list"]/tbody/tr'))==3)
+        time.sleep(2)
 
         #Añadimos censo
         self.driver.find_element_by_link_text('Home').click()
@@ -106,6 +114,7 @@ class AdminTestCase(StaticLiveServerTestCase):
         self.driver.find_element_by_id('id_voter_id').send_keys("2")
         self.driver.find_element_by_xpath('/html/body/div/div[3]/div/form/div/div/input[1]').click()
         time.sleep(2)
+        self.assertTrue(len(self.driver.find_elements_by_xpath('//*[@id="result_list"]/tbody/tr'))==1)
 
         #Se realiza la votacion
         self.driver.get(f'{self.live_server_url}/booth/1/')
@@ -115,7 +124,7 @@ class AdminTestCase(StaticLiveServerTestCase):
         self.driver.find_element_by_id('q1').click()
 
         self.driver.find_element_by_xpath('/html/body/div/div/div/button').click()
-        time.sleep(3)
+        time.sleep(2)
 
 
     def tearDown(self):          
