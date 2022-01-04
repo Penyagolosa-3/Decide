@@ -83,6 +83,18 @@ class AdminTestCase(StaticLiveServerTestCase):
         self.driver.find_element_by_xpath('/html/body/div/div[3]/div/div/form/div[1]/button').click()
         time.sleep(5)
 
+        #Añadimos usuario
+        self.driver.find_element_by_link_text('Home').click()
+        self.driver.find_element_by_link_text('Users').click()
+        time.sleep(1)
+        self.driver.find_element_by_link_text('Add users').click()
+        time.sleep(1)
+        self.driver.find_element_by_id('id_username').send_keys('User1')
+        self.driver.find_element_by_id('id_password1').send_keys('password1')
+        self.driver.find_element_by_id('id_password2').send_keys('password1')
+        self.driver.find_element_by_xpath('/html/body/div/div[3]/div/form/div/div/input[1]').click()
+        time.sleep(1)
+
 
 
 
