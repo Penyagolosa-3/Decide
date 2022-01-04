@@ -13,7 +13,7 @@ MODULES = [
     'voting',
 ]
 
-BASEURL = 'https://decide-penyagolosa.herokuapp.com/'
+BASEURL = 'https://localhost:8000'
 
 APIS = {
     'authentication': BASEURL,
@@ -30,7 +30,7 @@ APIS = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'decide',
+        'NAME': 'postgres',
 
         'USER': 'decide',
         'PASSWORD': 'decide',
