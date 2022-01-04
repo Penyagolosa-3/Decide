@@ -19,6 +19,7 @@ class Question(models.Model):
         return self.desc
 
 
+@receiver(post_save, sender=Question)
 def check_question(sender, instance, **kwargs):
     if instance.binary_question==True and instance.options.all().count()==0:
         option1 = QuestionOption(question=instance, number=1, option="Si")
