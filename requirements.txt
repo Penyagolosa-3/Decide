@@ -13,4 +13,3 @@ django-heroku
 gunicorn
 django-allauth==0.43.0
 django-import-export
-

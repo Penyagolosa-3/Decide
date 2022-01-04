@@ -16,7 +16,10 @@ Including another URLconf
 from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework_swagger.views import get_swagger_view
+
+from visualizer.views import TelegramBot
 from django.views.generic import TemplateView
 
 schema_view = get_swagger_view(title='Decide API')
@@ -25,6 +28,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('doc/', schema_view),
     path('gateway/', include('gateway.urls')),
+    path('webhooks/', csrf_exempt(TelegramBot.as_view())),
+    #path('webhooks/discord/', csrf_exempt(TelegramBot.as_view())),
 ]
 
 for module in settings.MODULES:
