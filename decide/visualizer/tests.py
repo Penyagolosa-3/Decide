@@ -95,6 +95,16 @@ class AdminTestCase(StaticLiveServerTestCase):
         self.driver.find_element_by_xpath('/html/body/div/div[3]/div/form/div/div/input[1]').click()
         time.sleep(1)
 
+        #Añadimos censo
+        self.driver.find_element_by_link_text('Home').click()
+        self.driver.find_element_by_link_text('Censuss').click()
+        time.sleep(1)
+        self.driver.find_element_by_link_text('Add census').click()
+        time.sleep(1)
+        self.driver.find_element_by_id('id_voting_id').send_keys("1")
+        self.driver.find_element_by_id('id_voter_id').send_keys("2")
+        self.driver.find_element_by_xpath('/html/body/div/div[3]/div/form/div/div/input[1]').click()
+
 
 
 
