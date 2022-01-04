@@ -1,3 +1,5 @@
+
+
 from django.test import TestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
@@ -7,35 +9,75 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 
-import sys
-sys.path.insert(1, '/home/luismi/Proyectos VS/Decide/decide/')
-#from base.tests import BaseTestCase
+from base.tests import BaseTestCase
 import time
-import unittest
 
-class AdminTestCase(unittest.TestCase):
+class AdminTestCase(StaticLiveServerTestCase):
 
 
     def setUp(self):
-        self.driver = webdriver.Chrome() 
+        #Load base test functionality for decide
+        self.base = BaseTestCase()
+        self.base.setUp()
 
-    def test_simpleCorrectLogin(self):                
-        self.driver.get('http://www.localhost:8000/admin/')
-        time.sleep(1)    
-        self.driver.find_element_by_id('id_username').send_keys("luismi")
-        self.driver.find_element_by_id('id_password').send_keys("contraseña1",Keys.ENTER)
-        time.sleep(2) 
-        print('Logueando')
+        options = webdriver.ChromeOptions()
+        options.headless = True
+        self.driver = webdriver.Chrome()
+
+        super().setUp()           
+
+    def test_createVoting(self):
+        self.driver.get(f'{self.live_server_url}/admin/')
+        self.driver.find_element_by_id('id_username').send_keys("admin")
+        self.driver.find_element_by_id('id_password').send_keys("qwerty",Keys.ENTER)
+        time.sleep(2)
+        print(self.driver.current_url)
         #In case of a correct loging, a element with id 'user-tools' is shown in the upper right part
-        print(len(self.driver.find_elements_by_id('user-tools')))
-        self.assertTrue(len(self.driver.find_elements_by_id('user-tools'))==1)       
+        self.assertTrue(len(self.driver.find_elements_by_id('user-tools'))==1)
         
-    def tearDown(self):           
+        #Vamos a crear la votación 
+        self.driver.find_element(by=By.LINK_TEXT, value="Votings").click()
+        time.sleep(1)
+        self.driver.find_element(by=By.XPATH, value="/html/body/div/div[3]/div/ul/li/a").click()
+        self.driver.find_element_by_id('id_name').send_keys("Votacion de prueba")
+        self.driver.find_element_by_id('id_desc').send_keys("Vamos a probar si funcionan los tests")
+        time.sleep(2)
+        #Almaceno la ventana de la votacion
+        window_before = self.driver.window_handles[0]
+        #Añadimos las opciones
+        self.driver.find_element_by_id('add_id_question').click()
+        #Almaceno la ventana de las opciones
+        window_after = self.driver.window_handles[1]
+        time.sleep(2)
+        #Cambio de ventana
+        self.driver.switch_to_window(window_after)
+        self.driver.find_element_by_id('id_desc').send_keys("¿Funcionan las pruebas de decide?")
+        time.sleep(3)
+        self.driver.find_element_by_id('id_options-0-number').send_keys("1")
+        self.driver.find_element_by_id('id_options-0-option').send_keys("Si")
+        self.driver.find_element_by_id('id_options-1-number').send_keys("2")
+        self.driver.find_element_by_id('id_options-1-option').send_keys("No")
+        self.driver.find_element_by_id('id_options-2-number').send_keys("3")
+        self.driver.find_element_by_id('id_options-2-option').send_keys("Casi")
+        self.driver.find_element(by=By.XPATH, value="/html/body/div/div[1]/div/form/div/div[2]/input").click()
+        time.sleep(3)    
+        #Volvemos a la ventana de las votaciones
+        self.driver.switch_to_window(window_before)
+        window_before = self.driver.window_handles[0]
+        self.driver.find_element_by_xpath('/html/body/div/div[3]/div/form/div/fieldset/div[4]/div/div[1]/a/img').click()
+        window_after = self.driver.window_handles[1]
+        self.driver.switch_to_window(window_after)
+        self.driver.find_element_by_id('id_name').send_keys("http://localhost:8000")
+        self.driver.find_element_by_id('id_url').send_keys("http://localhost:8000")
+        time.sleep(2)
+        self.driver.find_element_by_xpath('/html/body/div/div[1]/div/form/div/div/input').click()
+        self.driver.switch_to_window(window_before)
+        time.sleep(3)
+        self.driver.find_element_by_xpath('/html/body/div/div[3]/div/form/div/div/input[1]').click()
+        time.sleep(1)
+
+    def tearDown(self):          
+        super().tearDown()
         self.driver.quit()
 
-
-
-if __name__ == '__main__':
-    unittest.main()
-
-
+        self.base.tearDown()
