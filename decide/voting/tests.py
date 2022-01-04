@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
-
+from django.core.exceptions import ValidationError
 from base import mods
 from base.tests import BaseTestCase
 from census.models import Census
@@ -107,26 +107,55 @@ class VotingTestCase(BaseTestCase):
             self.assertEqual(tally.get(q["number"], 0), q["votes"])
 
     def test_create_detector_word(self):
-        detector = Detector(word="palabra")
-        detector.save()
-        self.assertEqual(detector.word, "palabra")
+        self.login()
+        data = {'word': 'palabra'}
+        response = self.client.post('/admin/voting/detector/add/', data, format='json')
+        self.assertEqual(response.status_code, 302)
 
     def test_create_percentage(self):
-        percentage = Percentage(number=25)
-        percentage.save()
-        self.assertEqual(percentage.number, 25)
+        self.login()
+        data = {'number': 25}
+        response = self.client.post('/admin/voting/percentage/add/', data, format='json')
+        self.assertEqual(response.status_code, 302)
 
     def test_update_detector(self):
+        self.login()
         detector = Detector(word="palabra")
-        detector.word = "palabra2"
         detector.save()
-        self.assertEqual(detector.word, "palabra2")
+        data = {'word': 'palabra2'}
+        response = self.client.put('/admin/voting/detector/{}/change/', data, format='json')
+        self.assertEqual(response.status_code, 302)
 
     def test_update_percentage(self):
-        percentage = Percentage(number=25)
-        percentage.number = 30
+        self.login()
+        percentage = Percentage(number = 25)
         percentage.save()
-        self.assertEqual(percentage.number, 30)
+        data = {'number': 40}
+        response = self.client.put('/admin/voting/percentage/{}/change/', data, format='json')
+        self.assertEqual(response.status_code, 302)
+
+    def test_bad_percentage_up(self):
+        self.login()
+        data = {'number':130}
+        response = self.client.post('/admin/voting/percentage/add', data, format='json')
+        self.assertEqual(response.status_code, 301)
+
+    def test_bad_percentage_float(self):
+        self.login()
+        data = {'number': 2.5}
+        response = self.client.post('/admin/voting/percentage/add', data, format='json')
+        self.assertEqual(response.status_code, 301)
+
+    def test_lofensivo(self):
+        self.login()
+        detector = Detector(word='palabra')
+        detector.save()
+        percentage = Percentage(number=1)
+        percentage.save()
+        question = Question(desc='Esta descripcion contiene alguna palabra ofensiva?')
+        with self.assertRaises(ValidationError):
+            question.clean()
+
 
     def test_create_voting_from_api(self):
         data = {'name': 'Example'}
