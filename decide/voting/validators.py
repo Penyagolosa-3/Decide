@@ -1,11 +1,21 @@
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator, MaxValueValidator
+from django.db import models
 
-from . import models
-"""Comentar y descomentar lsofensiva para hacer las migraciones de las bd, por defecto da
- error si se hace con los datos de los modelos"""
+class Detector(models.Model):
+    word = models.TextField()
+
+    def __str__(self):
+        return self.word
+
+class Percentage(models.Model):
+    number = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)])
+
+    def __str__(self):
+        return str(self.number)
+
 def lofensivo(value):
-    #lsofensiva=[]
-    lsofensiva = models.Detector.objects.all()
+    lsofensiva = Detector.objects.all()
     lsofensiva2 =[]
     
     for detector in lsofensiva:
@@ -29,13 +39,11 @@ def lofensivo(value):
     palabras = value.split()
 
     
-    numero= models.Percentage.objects.last()
-    #numero= 15
-    if len(models.Percentage.objects.all())==0:
-        numero= models.Percentage(number=15)
+    numero= Percentage.objects.last()
+    if len(Percentage.objects.all())==0:
+        numero= Percentage(number=15)
         numero.save()
     porcentaje= numero.number /100
-    #porcentaje= 15 /100
     cont = 0
     res= False
 
