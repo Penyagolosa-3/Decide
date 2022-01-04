@@ -26,7 +26,7 @@ class AdminTestCase(StaticLiveServerTestCase):
 
         super().setUp()           
 
-    def test_createVoting(self):
+    def test_visualizer(self):
         self.driver.get(f'{self.live_server_url}/admin/')
         self.driver.find_element_by_id('id_username').send_keys("admin")
         self.driver.find_element_by_id('id_password').send_keys("qwerty",Keys.ENTER)
@@ -74,11 +74,11 @@ class AdminTestCase(StaticLiveServerTestCase):
         self.driver.switch_to_window(window_before)
         time.sleep(1)
         self.driver.find_element_by_xpath('/html/body/div/div[3]/div/form/div/div/input[1]').click()
-        time.sleep(1)
+        time.sleep(20)
 
         #Iniciamos la votación
         self.driver.find_element_by_xpath('/html/body/div/div[3]/div/div/form/div[2]/table/tbody/tr[1]/td[1]/input').click()
-        time.sleep(5)
+        time.sleep(1)
         self.driver.find_element_by_xpath('/html/body/div/div[3]/div/div/form/div[1]/label/select/option[3]').click()
         self.driver.find_element_by_xpath('/html/body/div/div[3]/div/div/form/div[1]/button').click()
         time.sleep(5)
@@ -87,11 +87,12 @@ class AdminTestCase(StaticLiveServerTestCase):
         self.driver.find_element_by_link_text('Home').click()
         self.driver.find_element_by_link_text('Users').click()
         time.sleep(1)
-        self.driver.find_element_by_link_text('Add users').click()
+        self.driver.find_element_by_xpath('/html/body/div/div[3]/div/ul/li/a').click()
         time.sleep(1)
         self.driver.find_element_by_id('id_username').send_keys('User1')
-        self.driver.find_element_by_id('id_password1').send_keys('password1')
-        self.driver.find_element_by_id('id_password2').send_keys('password1')
+        self.driver.find_element_by_id('id_password1').send_keys('contraseña1')
+        self.driver.find_element_by_id('id_password2').send_keys('contraseña1')
+        time.sleep(1)
         self.driver.find_element_by_xpath('/html/body/div/div[3]/div/form/div/div/input[1]').click()
         time.sleep(1)
 
@@ -99,14 +100,22 @@ class AdminTestCase(StaticLiveServerTestCase):
         self.driver.find_element_by_link_text('Home').click()
         self.driver.find_element_by_link_text('Censuss').click()
         time.sleep(1)
-        self.driver.find_element_by_link_text('Add census').click()
+        self.driver.find_element_by_xpath('/html/body/div/div[3]/div/ul/li/a').click()
         time.sleep(1)
         self.driver.find_element_by_id('id_voting_id').send_keys("1")
         self.driver.find_element_by_id('id_voter_id').send_keys("2")
         self.driver.find_element_by_xpath('/html/body/div/div[3]/div/form/div/div/input[1]').click()
+        time.sleep(2)
 
+        #Se realiza la votacion
+        self.driver.get(f'{self.live_server_url}/booth/1/')
+        self.driver.find_element_by_id('username').send_keys("admin")
+        self.driver.find_element_by_id('password').send_keys("qwerty", Keys.ENTER)
+        time.sleep(1)
+        self.driver.find_element_by_id('q1').click()
 
-
+        self.driver.find_element_by_xpath('/html/body/div/div/div/button').click()
+        time.sleep(3)
 
 
     def tearDown(self):          
