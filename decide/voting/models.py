@@ -20,13 +20,25 @@ class Percentage(models.Model):
     def __str__(self):
         return str(self.number)
 
+
+
 class Question(models.Model):
     desc = models.TextField()
     def clean(self):
         if(validators.lofensivo(self.desc)):
             raise ValidationError("Se ha detectado lenguaje ofensivo")
+
+    binary_question = models.BooleanField(default=False,verbose_name="Answers Yes/No", help_text="Check the box to generate a binary question")
     def __str__(self):
         return self.desc
+
+
+def check_question(sender, instance, **kwargs):
+    if instance.binary_question==True and instance.options.all().count()==0:
+        option1 = QuestionOption(question=instance, number=1, option="Si")
+        option1.save()
+        option2 = QuestionOption(question=instance, number=2, option="No") 
+        option2.save()
 
 
 class QuestionOption(models.Model):
