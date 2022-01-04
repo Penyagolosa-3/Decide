@@ -8,20 +8,6 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from base import mods
 from base.models import Auth, Key
 
-class Detector(models.Model):
-    word = models.TextField()
-
-    def __str__(self):
-        return self.word
-
-class Percentage(models.Model):
-    number = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)])
-
-    def __str__(self):
-        return str(self.number)
-
-
-
 class Question(models.Model):
     desc = models.TextField()
     def clean(self):

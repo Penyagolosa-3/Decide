@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from . import validators
-from .models import Detector, Percentage, Question, QuestionOption, Voting
+from .models import Question, QuestionOption, Voting
 from base.serializers import KeySerializer, AuthSerializer
 
 
