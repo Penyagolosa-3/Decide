@@ -13,7 +13,7 @@ from census.models import Census
 from mixnet.mixcrypt import ElGamal
 from mixnet.mixcrypt import MixCrypt
 from mixnet.models import Auth
-from voting.models import Voting, Question, QuestionOption, Detector, Percentage
+from voting.models import Voting, Question, QuestionOption
 
 
 class VotingTestCase(BaseTestCase):
@@ -37,6 +37,23 @@ class VotingTestCase(BaseTestCase):
         for i in range(5):
             opt = QuestionOption(question=q, option='option {}'.format(i+1))
             opt.save()
+        v = Voting(name='test voting', question=q)
+        v.save()
+
+        a, _ = Auth.objects.get_or_create(url=settings.BASEURL,
+                                          defaults={'me': True, 'name': 'test auth'})
+        a.save()
+        v.auths.add(a)
+
+        return v
+
+    def test_create_binary_voting(self):
+        q = Question(desc='binary voting', binary_question=True)
+        q.save()
+        
+        opt = QuestionOption(question=q)
+        opt.save()
+
         v = Voting(name='test voting', question=q)
         v.save()
 
@@ -106,27 +123,7 @@ class VotingTestCase(BaseTestCase):
         for q in v.postproc:
             self.assertEqual(tally.get(q["number"], 0), q["votes"])
 
-    def test_create_detector_word(self):
-        detector = Detector(word="palabra")
-        detector.save()
-        self.assertEqual(detector.word, "palabra")
-
-    def test_create_percentage(self):
-        percentage = Percentage(number=25)
-        percentage.save()
-        self.assertEqual(percentage.number, 25)
-
-    def test_update_detector(self):
-        detector = Detector(word="palabra")
-        detector.word = "palabra2"
-        detector.save()
-        self.assertEqual(detector.word, "palabra2")
-
-    def test_update_percentage(self):
-        percentage = Percentage(number=25)
-        percentage.number = 30
-        percentage.save()
-        self.assertEqual(percentage.number, 30)
+    
 
     def test_create_voting_from_api(self):
         data = {'name': 'Example'}
