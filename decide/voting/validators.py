@@ -1,25 +1,9 @@
-from django.core.exceptions import ValidationError
-from django.core.validators import MinValueValidator, MaxValueValidator
-from django.db import models
 
-class Detector(models.Model):
-    word = models.TextField()
-
-    def __str__(self):
-        return self.word
-
-class Percentage(models.Model):
-    number = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)])
-
-    def __str__(self):
-        return str(self.number)
+import unicodedata
 
 def lofensivo(value):
-    lsofensiva = Detector.objects.all()
-    lsofensiva2 =[]
-    
-    for detector in lsofensiva:
-        lsofensiva2.append(detector.word)
+
+    lsofensiva = ["caca", "pedo", "pis", "pilila", "ceporro", "tonto", "imbecil", "estupido", "idiota"]
 
     if("¿" in value):
         value=value.replace("¿", "")
@@ -34,21 +18,19 @@ def lofensivo(value):
     if(")" in value):
         value=value.replace(")", "")
 
-    value=value.lower()
 
+    value=value.lower()
+    trans_tab = dict.fromkeys(map(ord, u'\u0301\u0308'), None)
+    value = unicodedata.normalize('NFKC', unicodedata.normalize('NFKD', value).translate(trans_tab))
     palabras = value.split()
 
-    
-    numero= Percentage.objects.last()
-    if len(Percentage.objects.all())==0:
-        numero= Percentage(number=15)
-        numero.save()
-    porcentaje= numero.number /100
+ 
+    porcentaje= 20 / 100
     cont = 0
     res= False
 
     for palabra in palabras:
-        if(palabra in lsofensiva2):
+        if(palabra in lsofensiva):
             cont+=1
         
     if(cont/len(palabras)>porcentaje):
