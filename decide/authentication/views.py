@@ -57,7 +57,7 @@ class RegisterView(APIView):
 def redirection(request):
 
     user = request.user
-    session_token, created = Token.objects.get_or_create(user=user)
+    session_token = Token.objects.get_or_create(user=user)[0]
     host = request.get_host()
     scheme = request.is_secure() and "https" or "http"
     base_url = scheme+'://'+request.get_host()

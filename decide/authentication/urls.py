@@ -1,4 +1,3 @@
-from django.shortcuts import redirect
 from django.urls import include, path
 from rest_framework.authtoken.views import obtain_auth_token
 from django.views.generic import TemplateView
