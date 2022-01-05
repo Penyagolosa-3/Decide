@@ -14,7 +14,6 @@ from mixnet.mixcrypt import ElGamal
 from mixnet.mixcrypt import MixCrypt
 from mixnet.models import Auth
 from voting.models import Voting, Question, QuestionOption
-from voting.validators import Detector, Percentage
 
 
 class VotingTestCase(BaseTestCase):
@@ -38,6 +37,23 @@ class VotingTestCase(BaseTestCase):
         for i in range(5):
             opt = QuestionOption(question=q, option='option {}'.format(i+1))
             opt.save()
+        v = Voting(name='test voting', question=q)
+        v.save()
+
+        a, _ = Auth.objects.get_or_create(url=settings.BASEURL,
+                                          defaults={'me': True, 'name': 'test auth'})
+        a.save()
+        v.auths.add(a)
+
+        return v
+
+    def test_create_binary_voting(self):
+        q = Question(desc='binary voting', binary_question=True)
+        q.save()
+        
+        opt = QuestionOption(question=q)
+        opt.save()
+
         v = Voting(name='test voting', question=q)
         v.save()
 
@@ -106,57 +122,6 @@ class VotingTestCase(BaseTestCase):
 
         for q in v.postproc:
             self.assertEqual(tally.get(q["number"], 0), q["votes"])
-
-    def test_create_detector_word(self):
-        self.login()
-        data = {'word': 'palabra'}
-        response = self.client.post('/admin/voting/detector/add/', data, format='json')
-        self.assertEqual(response.status_code, 302)
-
-    def test_create_percentage(self):
-        self.login()
-        data = {'number': 25}
-        response = self.client.post('/admin/voting/percentage/add/', data, format='json')
-        self.assertEqual(response.status_code, 302)
-
-    def test_update_detector(self):
-        self.login()
-        detector = Detector(word="palabra")
-        detector.save()
-        data = {'word': 'palabra2'}
-        response = self.client.put('/admin/voting/detector/{}/change/', data, format='json')
-        self.assertEqual(response.status_code, 302)
-
-    def test_update_percentage(self):
-        self.login()
-        percentage = Percentage(number = 25)
-        percentage.save()
-        data = {'number': 40}
-        response = self.client.put('/admin/voting/percentage/{}/change/', data, format='json')
-        self.assertEqual(response.status_code, 302)
-
-    def test_bad_percentage_up(self):
-        self.login()
-        data = {'number':130}
-        response = self.client.post('/admin/voting/percentage/add', data, format='json')
-        self.assertEqual(response.status_code, 301)
-
-    def test_bad_percentage_float(self):
-        self.login()
-        data = {'number': 2.5}
-        response = self.client.post('/admin/voting/percentage/add', data, format='json')
-        self.assertEqual(response.status_code, 301)
-
-    def test_lofensivo(self):
-        self.login()
-        detector = Detector(word='palabra')
-        detector.save()
-        percentage = Percentage(number=1)
-        percentage.save()
-        question = Question(desc='Esta descripcion contiene alguna palabra ofensiva?')
-        with self.assertRaises(ValidationError):
-            question.clean()
-
 
     def test_create_voting_from_api(self):
         data = {'name': 'Example'}

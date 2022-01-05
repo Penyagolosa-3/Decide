@@ -1,18 +1,8 @@
 from rest_framework import serializers
-from .models import Question, QuestionOption, Voting
-from .validators import Detector, Percentage, lofensivo
 from base.serializers import KeySerializer, AuthSerializer
 
 
-class DetectorSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Detector
-        fields = ('word')
 
-class PercentageSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Percentage
-        fields = ('number')
 
 class QuestionOptionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

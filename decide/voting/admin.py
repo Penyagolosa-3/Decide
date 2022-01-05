@@ -3,7 +3,6 @@ from django.utils import timezone
 
 
 from .models import QuestionOption
-from .validators import Detector, Percentage
 from .models import Question
 from .models import Voting
 
@@ -38,14 +37,6 @@ class QuestionOptionInline(admin.TabularInline):
 class QuestionAdmin(admin.ModelAdmin):
     inlines = [QuestionOptionInline]
 
-
-class DetectorAdmin(admin.ModelAdmin):
-    model = Detector
-
-class PercentageAdmin(admin.ModelAdmin):
-    model = Percentage
-
-
 class VotingAdmin(admin.ModelAdmin):
     list_display = ('name', 'start_date', 'end_date')
     readonly_fields = ('start_date', 'end_date', 'pub_key',
@@ -57,7 +48,6 @@ class VotingAdmin(admin.ModelAdmin):
     actions = [ start, stop, tally ]
 
 
+
 admin.site.register(Voting, VotingAdmin)
 admin.site.register(Question, QuestionAdmin)
-admin.site.register(Detector, DetectorAdmin)
-admin.site.register(Percentage, PercentageAdmin)
