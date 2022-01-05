@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from django.db import IntegrityError
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.core.exceptions import ObjectDoesNotExist
 
 from .serializers import UserSerializer
@@ -53,3 +53,17 @@ class RegisterView(APIView):
         except IntegrityError:
             return Response({}, status=HTTP_400_BAD_REQUEST)
         return Response({'user_pk': user.pk, 'token': token.key}, HTTP_201_CREATED)
+
+def redirection(request):
+
+    user = request.user
+    session_token, created = Token.objects.get_or_create(user=user)
+    host = request.get_host()
+    scheme = request.is_secure() and "https" or "http"
+    base_url = f'{scheme}://{request.get_host()}'
+    context = {
+        "token":session_token.key,
+        "callback":base_url+'/booth/voting',
+        "host":host,
+    }
+    return render(request, 'redirection.html',context)
