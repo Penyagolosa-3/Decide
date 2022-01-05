@@ -60,7 +60,7 @@ def redirection(request):
     session_token, created = Token.objects.get_or_create(user=user)
     host = request.get_host()
     scheme = request.is_secure() and "https" or "http"
-    base_url = f'{scheme}://{request.get_host()}'
+    base_url = scheme+'://'+request.get_host()
     context = {
         "token":session_token.key,
         "callback":base_url+'/booth/voting',
