@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
-
+from django.core.exceptions import ValidationError
 from base import mods
 from base.tests import BaseTestCase
 from census.models import Census
@@ -122,8 +122,6 @@ class VotingTestCase(BaseTestCase):
 
         for q in v.postproc:
             self.assertEqual(tally.get(q["number"], 0), q["votes"])
-
-    
 
     def test_create_voting_from_api(self):
         data = {'name': 'Example'}
