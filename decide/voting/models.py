@@ -18,6 +18,10 @@ class Question(models.Model):
     def __str__(self):
         return self.desc
 
+    YNNS_question = models.BooleanField(default=False,verbose_name="Answers Yes, No, NS/NC", help_text="Check the box to create a question of Yes, No or NS/NC")
+    def __str__(self):
+        return self.desc
+
 
 @receiver(post_save, sender=Question)
 def check_question(sender, instance, **kwargs):
@@ -25,6 +29,16 @@ def check_question(sender, instance, **kwargs):
         option1 = QuestionOption(question=instance, number=1, option="Si")
         option1.save()
         option2 = QuestionOption(question=instance, number=2, option="No") 
+        option2.save()
+
+@receiver(post_save, sender=Question)
+def check_question(sender, instance, **kwargs):
+    if instance.YNNS_question==True and instance.options.all().count()==0:
+        option1 = QuestionOption(question=instance, number=1, option="Si")
+        option1.save()
+        option2 = QuestionOption(question=instance, number=2, option="No") 
+        option2.save()
+        option2 = QuestionOption(question=instance, number=3, option="NS/NC") 
         option2.save()
 
 
