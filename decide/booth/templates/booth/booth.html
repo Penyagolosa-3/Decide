@@ -1,6 +1,8 @@
 {% extends "base.html" %}
-{% load i18n static %}
 
+{% load i18n static %}
+{% load socialaccount %}
+{% providers_media_js %}
 {% block extrahead %}
     <link type="text/css" rel="stylesheet"
          href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
@@ -8,6 +10,7 @@
          href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
     <link type="text/css" rel="stylesheet" href="{% static "booth/style.css" %}" />
 {% endblock %}
+
 
 {% block content %}
     <div id="app-booth">
@@ -50,7 +53,25 @@
                 <b-button type="submit" variant="primary">{% trans "Login" %}</b-button>
             </b-form>
 
+            <div id="main">
+                <span class="label">Inicia sesión con:</span>
+              </br>
+              </br>
+                <div id="customBtn" class="customGPlusSignIn">
+                  <span class="icon"></span>
+                  <a href="{% provider_login_url "google" %}">
+                  <span  class="buttonText">Google</span>
+              </a>
+                </div>
+              </div>
+           
+        {% if user.is_authenticated %}
+        estoy autenticado
+        <a href="{% url 'logoutG' %}">Logout</a>
+        {% endif %}
+            
             <!-- Voting -->
+        
             <div v-if="!signup">
                 <h2>[[ voting.question.desc ]]</h2>
                 <b-form-group v-for="opt in voting.question.options" :key="opt.number">
@@ -65,8 +86,10 @@
                     {% trans "Vote" %}
                 </b-button>
             </div>
+            
         </div>
     </div>
+        
 {% endblock %}
 
 {% block extrabody %}
@@ -152,6 +175,7 @@
                             }
                         });
                 },
+                
                 onSubmitLogin(evt) {
                     evt.preventDefault();
                     this.postData("{% url "gateway" "authentication" "/login/" %}", this.form)
