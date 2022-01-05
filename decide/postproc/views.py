@@ -167,6 +167,23 @@ class PostProcView(APIView):
         porcentajeMujeres = len(mujeres)/total
 
         return not (porcentajeMujeres < 0.4 or porcentajeHombres < 0.4)
+    
+    def dhondt(self, options, seats):
+        
+        for opt in options:
+            opt['postproc'] = 0
+
+        for i in range(seats):
+            max(options, 
+                key = lambda x : x['votes'] / (x['postproc'] + 1.0))['postproc'] += 1
+
+        options.sort(key=lambda x: -x['postproc'])
+        out = options
+
+        a = len(options)-1
+        b = 0
+        c = True
+
 
     def post(self, request):
         """
