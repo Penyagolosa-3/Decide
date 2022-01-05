@@ -184,6 +184,14 @@ class PostProcView(APIView):
         b = 0
         c = True
 
+        while b < a:
+            if(options[b]['votes'] == options[b+1]['votes'] and options[b]['votes'] == 0):
+                c = True
+            else:
+                c=False
+                break
+            b = b+1
+
 
     def post(self, request):
         """
