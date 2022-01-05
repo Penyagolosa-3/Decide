@@ -191,6 +191,15 @@ class PostProcView(APIView):
                 c=False
                 break
             b = b+1
+        
+        if(seats == 0):
+            out = {'message': 'Los escaños son insuficientes'}
+        elif(c == True):
+            out = {'message': 'No hay votos'}
+        elif(len(options) < 2):
+            out = {'message': 'No hay opciones suficientes'}
+
+        return out
 
 
     def post(self, request):
