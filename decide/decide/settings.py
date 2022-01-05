@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_swagger',
+    'import_export',
     'gateway',
 
 
@@ -67,6 +68,7 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -220,15 +222,23 @@ if os.path.exists("config.jsonnet"):
 INSTALLED_APPS = INSTALLED_APPS + MODULES
 
 
-SITE_ID = 2
 
-LOGIN_REDIRECT_URL ='/booth/voting'
+
+
+SITE_ID = 1
+
+LOGIN_REDIRECT_URL = '/authentication/redirection'
 LOGOUT_REDIRECT_URL = '/booth/voting'
+
 
 NOSE_ARGS = [
     '--with-xunit'
 ]
 
-import django_heroku
 
+# import django_heroku
+# django_heroku.settings(locals(),test_runner=False)
+
+
+import django_heroku
 django_heroku.settings(locals(),test_runner=False)

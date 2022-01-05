@@ -27,7 +27,9 @@
         <b-alert :variant="alertLvl" dismissible v-model="alertShow">
             [[ alertMsg ]]
         </b-alert>
-
+        {% if user.is_authenticated %}
+        <a href="{% url 'logoutG' %}">Logout</a>
+        {% endif %}
         <div class="voting">
             <h1>[[ voting.id ]] - [[ voting.name ]]</h1>
 
@@ -61,14 +63,26 @@
                   <span class="icon"></span>
                   <a href="{% provider_login_url "google" %}">
                   <span  class="buttonText">Google</span>
-              </a>
+                    </a>
                 </div>
+            </br>
+            </br>
+                <div id="customBtn" class="customGPlusSignIn">
+                    <span class="icon"></span>
+                    <a href="{% provider_login_url "microsoft" %}">
+                    <span  class="buttonText">Microsoft</span>
+                      </a>
+                  </div>
+                </br>
+                </br>
+                  <div id="customBtn" class="customGPlusSignIn">
+                    <span class="icon"></span>
+                    <a href="{% provider_login_url "github" %}">
+                    <span  class="buttonText">Github</span>
+                      </a>
+                  </div>
               </div>
-           
-        {% if user.is_authenticated %}
-        estoy autenticado
-        <a href="{% url 'logoutG' %}">Logout</a>
-        {% endif %}
+        
             
             <!-- Voting -->
         
