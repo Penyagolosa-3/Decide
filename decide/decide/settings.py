@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_swagger',
+    'import_export',
     'gateway',
 
 
@@ -54,6 +55,9 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.github',
 
 ]
+
+
+IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -221,6 +225,18 @@ NOSE_ARGS = [
     '--with-xunit'
 ]
 
-import django_heroku
 
+# import django_heroku
+# django_heroku.settings(locals(),test_runner=False)
+
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
+)
+SITE_ID = 3
+
+LOGIN_REDIRECT_URL = '/'
+
+import django_heroku
 django_heroku.settings(locals(),test_runner=False)
