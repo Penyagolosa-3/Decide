@@ -10,7 +10,6 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -57,7 +56,18 @@ INSTALLED_APPS = [
 ]
 
 
-IMPORT_EXPORT_USE_TRANSACTIONS = True
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -70,6 +80,7 @@ REST_FRAMEWORK = {
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'base.backends.AuthBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
 ]
 
 MODULES = [
@@ -210,15 +221,13 @@ if os.path.exists("config.jsonnet"):
 INSTALLED_APPS = INSTALLED_APPS + MODULES
 
 
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend'
-)
 
-SITE_ID = 3
+
+
+SITE_ID = 1
 
 LOGIN_REDIRECT_URL = '/authentication/redirection'
-LOGOUT_REDIRECT_URL = '/authentication/signin'
+LOGOUT_REDIRECT_URL = '/booth/voting'
 
 
 NOSE_ARGS = [
@@ -229,14 +238,6 @@ NOSE_ARGS = [
 # import django_heroku
 # django_heroku.settings(locals(),test_runner=False)
 
-
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend'
-)
-SITE_ID = 3
-
-LOGIN_REDIRECT_URL = '/'
 
 import django_heroku
 django_heroku.settings(locals(),test_runner=False)
