@@ -3,9 +3,6 @@ from .validators import lofensivo
 from .models import Question, QuestionOption, Voting
 from base.serializers import KeySerializer, AuthSerializer
 
-
-
-
 class QuestionOptionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = QuestionOption

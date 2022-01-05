@@ -24,7 +24,6 @@ def lofensivo(value):
     value = unicodedata.normalize('NFKC', unicodedata.normalize('NFKD', value).translate(trans_tab))
     palabras = value.split()
 
- 
     porcentaje= 20 / 100
     cont = 0
     res= False
