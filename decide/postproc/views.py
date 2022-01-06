@@ -235,7 +235,7 @@ class PostProcView(APIView):
             return self.borda(opts)
         elif t == 'PARIDAD':
             return Response(self.paridad(opts))
-        elif typeOfData == 'DHONDT':
+        elif t == 'DHONDT':
             return Response(self.dhondt(options, s))
 
         return Response({})
