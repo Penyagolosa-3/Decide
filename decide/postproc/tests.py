@@ -326,7 +326,7 @@ class PostProcTestCase(APITestCase):
 
         values = response.json()
         self.assertEqual(values, expected_result)  
-        
+
     def test_dhondt_error(self):
         """
             * Definicion: Test negativo que no recibe escaños
@@ -349,4 +349,14 @@ class PostProcTestCase(APITestCase):
                 { "option": "Option 6", "number": 6, "votes": 2 },
             ]
         }
+         
+        expected_result = {
+            'message': 'Los escaños son insuficientes'
+        }
+        
+        response = self.client.post("/postproc/", data, format="json")
+        self.assertEqual(response.status_code, 200)
+
+        values = response.json()
+        self.assertEqual(values, expected_result) 
 
