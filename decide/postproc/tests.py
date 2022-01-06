@@ -291,3 +291,27 @@ class PostProcTestCase(APITestCase):
             ]
         }
 
+          expected_result = [
+            { "option": "Option 1", "number": 1, "votes": 5, "postproc": 3 },
+            { "option": "Option 5", "number": 5, "votes": 5, "postproc": 3 },
+            { "option": "Option 3", "number": 3, "votes": 3, "postproc": 1 },
+            { "option": "Option 4", "number": 4, "votes": 2, "postproc": 1 },
+            { "option": "Option 2", "number": 2, "votes": 0, "postproc": 0 },
+            { "option": "Option 6", "number": 6, "votes": 1, "postproc": 0 },
+        ]
+
+
+        data = {
+            "type": "DHONDT",
+            "seats": 10,
+            "options": [
+                { "option": "Option 1", "number": 1, "votes": 20 },
+                { "option": "Option 2", "number": 2, "votes": 11 },
+                { "option": "Option 3", "number": 3, "votes": 0 },
+                { "option": "Option 4", "number": 4, "votes": 10 },
+                { "option": "Option 5", "number": 5, "votes": 5 },
+            ]
+        }
+
+        
+
