@@ -25,6 +25,7 @@ def lofensivo(value):
     palabras = value.split()
 
     porcentaje= 20 / 100
+
     cont = 0
     res= False
 
