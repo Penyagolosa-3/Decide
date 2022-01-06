@@ -291,7 +291,7 @@ class PostProcTestCase(APITestCase):
             ]
         }
 
-          expected_result = [
+        expected_result = [
             { "option": "Option 1", "number": 1, "votes": 5, "postproc": 3 },
             { "option": "Option 5", "number": 5, "votes": 5, "postproc": 3 },
             { "option": "Option 3", "number": 3, "votes": 3, "postproc": 1 },
@@ -299,7 +299,6 @@ class PostProcTestCase(APITestCase):
             { "option": "Option 2", "number": 2, "votes": 0, "postproc": 0 },
             { "option": "Option 6", "number": 6, "votes": 1, "postproc": 0 },
         ]
-
 
         data = {
             "type": "DHONDT",
