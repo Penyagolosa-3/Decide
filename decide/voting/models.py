@@ -4,23 +4,8 @@ from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.core.validators import MinValueValidator, MaxValueValidator
 from base import mods
 from base.models import Auth, Key
-
-class Detector(models.Model):
-    word = models.TextField()
-
-    def __str__(self):
-        return self.word
-
-class Percentage(models.Model):
-    number = models.PositiveIntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)])
-
-    def __str__(self):
-        return str(self.number)
-
-
 
 class Question(models.Model):
     desc = models.TextField()
@@ -32,12 +17,27 @@ class Question(models.Model):
     def __str__(self):
         return self.desc
 
+    YNNS_question = models.BooleanField(default=False,verbose_name="Answers Yes, No, NS/NC", help_text="Check the box to create a question of Yes, No or NS/NC")
+    def __str__(self):
+        return self.desc
 
+
+@receiver(post_save, sender=Question)
 def check_question(sender, instance, **kwargs):
     if instance.binary_question==True and instance.options.all().count()==0:
         option1 = QuestionOption(question=instance, number=1, option="Si")
         option1.save()
         option2 = QuestionOption(question=instance, number=2, option="No") 
+        option2.save()
+
+@receiver(post_save, sender=Question)
+def check_question(sender, instance, **kwargs):
+    if instance.YNNS_question==True and instance.options.all().count()==0:
+        option1 = QuestionOption(question=instance, number=1, option="Si")
+        option1.save()
+        option2 = QuestionOption(question=instance, number=2, option="No") 
+        option2.save()
+        option2 = QuestionOption(question=instance, number=3, option="NS/NC") 
         option2.save()
 
 
