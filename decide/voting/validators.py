@@ -1,5 +1,4 @@
 
-
 import unicodedata
 
 def lofensivo(value):
@@ -24,7 +23,6 @@ def lofensivo(value):
     trans_tab = dict.fromkeys(map(ord, u'\u0301\u0308'), None)
     value = unicodedata.normalize('NFKC', unicodedata.normalize('NFKD', value).translate(trans_tab))
     palabras = value.split()
-
 
     porcentaje= 20 / 100
 

@@ -95,7 +95,6 @@ MODULES = [
     'voting',
 ]
 
-
 BASEURL = 'http://localhost:8000'
 
 APIS = {
@@ -109,6 +108,7 @@ APIS = {
     'visualizer': BASEURL,
     'voting': BASEURL,
 }
+
 
 
 MIDDLEWARE = [
