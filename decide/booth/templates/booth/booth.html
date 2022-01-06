@@ -18,7 +18,7 @@
         <b-navbar type="dark" variant="secondary">
             <b-navbar-brand tag="h1">Decide</b-navbar-brand>
                 <b-navbar-nav class="ml-auto" v-if="!signup">
-                    <b-nav-item href="#" v-on:click="decideLogout">
+                    <b-nav-item v-on:click="decideLogout">
                         {% trans "logout" %}
                     </b-nav-item>
                 </b-navbar-nav>
@@ -27,9 +27,8 @@
         <b-alert :variant="alertLvl" dismissible v-model="alertShow">
             [[ alertMsg ]]
         </b-alert>
-        {% if user.is_authenticated %}
-        <a href="{% url 'logoutG' %}">Logout</a>
-        {% endif %}
+
+       
         <div class="voting">
             <h1>[[ voting.id ]] - [[ voting.name ]]</h1>
 
@@ -53,12 +52,12 @@
                         required />
                 </b-form-group>
                 <b-button type="submit" variant="primary">{% trans "Login" %}</b-button>
-            </b-form>
+            
 
             <div id="main">
                 <span class="label">Inicia sesión con:</span>
-              </br>
-              </br>
+            </br>
+            </br>
                 <div id="customBtn" class="customGPlusSignIn">
                   <span class="icon"></span>
                   <a href="{% provider_login_url "google" %}">
@@ -71,18 +70,18 @@
                     <span class="icon"></span>
                     <a href="{% provider_login_url "microsoft" %}">
                     <span  class="buttonText">Microsoft</span>
-                      </a>
-                  </div>
-                </br>
-                </br>
-                  <div id="customBtn" class="customGPlusSignIn">
+                    </a>
+                </div>
+            </br>
+            </br>
+                <div id="customBtn" class="customGPlusSignIn">
                     <span class="icon"></span>
                     <a href="{% provider_login_url "github" %}">
                     <span  class="buttonText">Github</span>
-                      </a>
-                  </div>
-              </div>
-              
+                    </a>
+                </div>
+            </div>
+            </b-form>
         
             
             <!-- Voting -->
@@ -216,11 +215,17 @@
                 decideLogout(evt) {
                     evt.preventDefault();
                     var data = {token: this.token};
-                    this.postData("{% url "gateway" "authentication" "/logout/" %}", data);
-                    this.token = null;
-                    this.user = null;
-                    document.cookie = 'decide=;';
-                    this.signup = true;
+                    this.postData("{% url "gateway" "authentication" "/logout/" %}", data)
+                        .then(data => {
+                            this.token = null;
+                            this.user = null;
+                            document.cookie = 'decide=;';
+                            this.signup = true; 
+
+                            window.location.href = '/authentication/logoutG';
+                        })
+                    
+
                 },
                 decideEncrypt() {
                     var bigmsg = BigInt.fromJSONObject(this.selected.toString());
