@@ -6,10 +6,11 @@ from selenium.webdriver.common.keys import Keys
 from time import sleep
 
 options = webdriver.ChromeOptions()
+options.headless = True
 driver = webdriver.Chrome(options=options)
 driver.get("http://127.0.0.1:8000/admin/")
-driver.find_element_by_id('id_username').send_keys("marmarave")
-driver.find_element_by_id('id_password').send_keys("complexpassword",Keys.ENTER)
+driver.find_element_by_id('id_username').send_keys("decide")
+driver.find_element_by_id('id_password').send_keys("decide",Keys.ENTER)
 driver.get("http://127.0.0.1:8000/admin/census/census/")
 driver.find_element(By.CSS_SELECTOR, ".export_link").click()
 driver.find_element_by_id('id_file_format').send_keys(Keys.DOWN)
