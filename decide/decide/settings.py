@@ -79,21 +79,7 @@ MODULES = [
     'voting',
 ]
 
-
-BASEURL = 'https://decide-penyagolosa.herokuapp.com'
-
-APIS = {
-    'authentication': BASEURL,
-    'base': BASEURL,
-    'booth': BASEURL,
-    'census': BASEURL,
-    'mixnet': BASEURL,
-    'postproc': BASEURL,
-    'store': BASEURL,
-    'visualizer': BASEURL,
-    'voting': BASEURL,
-}
-
+BASEURL = 'http://localhost:8000/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
