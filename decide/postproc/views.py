@@ -169,14 +169,25 @@ class PostProcView(APIView):
         return not (porcentajeMujeres < 0.4 or porcentajeHombres < 0.4)
     
     def dhondt(self, options, seats):
-        
+
+        """
+            * Definicion: Asigna escaños en las listas electorales
+            * Entrada: Json de la votación asignando los escaños según corresponda
+            * Salida: Lista de la opciones ordenadas según el número de escaños que posean,
+            de mayor a menor
+        """
+
+        #Para cada opcion se le añaden escaños
         for opt in options:
             opt['postproc'] = 0
 
+        #Para asignar escaños, se realiza la división entre los vosotros que tiene cada opción y los escaños (inicialmente se divide entre 1)
+        #El mayor cociente se lleva el escaño
         for i in range(seats):
             max(options, 
                 key = lambda x : x['votes'] / (x['postproc'] + 1.0))['postproc'] += 1
 
+        #Se ordenan las opciones según los escaños
         options.sort(key=lambda x: -x['postproc'])
         out = options
 
@@ -224,5 +235,7 @@ class PostProcView(APIView):
             return self.borda(opts)
         elif t == 'PARIDAD':
             return Response(self.paridad(opts))
+        elif typeOfData == 'DHONDT':
+            return Response(self.dhondt(options, s))
 
         return Response({})
