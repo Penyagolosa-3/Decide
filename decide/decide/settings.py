@@ -215,4 +215,4 @@ NOSE_ARGS = [
 ]
 
 import django_heroku
-django_heroku.settings(locals(),test_runner=False)
+#django_heroku.settings(locals(),test_runner=False)
