@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Visualizer</title>
+        <meta charset="UTF-8">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.2/dist/chart.min.js"></script>
+    </head>
+
 {% extends "base.html" %}
 {% load i18n static %}
 
@@ -55,7 +63,7 @@
                 </table>
             </div>
             <div v-else>
-                <h2 class="heading">Resultados:</h2>
+                <h2 class="heading">Resultadoss:</h2>
 
                 <table class="table table-bordered table-striped">
                     <thead>
@@ -85,6 +93,27 @@
     <script src="https://unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
     <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
 
+    <canvas id="myChart" width="100" height="100"></canvas>
+    <canvas id="myChart2" width="100" height="100"></canvas>
+    <canvas id="myChart3" width="100" height="100"></canvas>
+
+    <div id="dateCharts">
+
+    </div>
+    <style>
+        #myChart {
+            width:1800px !important;
+            height:500px !important;
+        }
+        #myChart2 {
+            width:500px !important;
+            height:500px !important;
+        }
+        #myChart3 {
+            width:1000px !important;
+            height:500px !important;
+        }
+    </style>
     <script>
         var voting = {{voting|safe}};
         var app = new Vue({
@@ -244,6 +273,89 @@
             }
         }
        });
+       var fechas = [];
+       app.getVotingCount().then(data => {
+           data = data.votingCount;
+           console.log(new Date(data[0].created_at));
+           const dateCharts = document.getElementById('dateCharts');
+           var filteredDates = {};
+           for(let p of data){
+                let votingDate = new Date(p.created_at),
+                    votingDay = votingDate.getDate(),
+                    votingTime = votingDate.getHours();
+
+                filteredDates[votingDay] = filteredDates[votingDay]!== undefined ? filteredDates[votingDay] : {};
+
+                filteredDates[votingDay][votingTime] = filteredDates[votingDay][votingTime]!==undefined ? filteredDates[votingDay][votingTime] : {};
+
+                filteredDates[votingDay][votingTime][voting.postproc[p.option_id].option] = filteredDates[votingDay][votingTime][voting.postproc[p.option_id].option]!==undefined ? filteredDates[votingDay][votingTime][voting.postproc[p.option_id].option] : 0;
+
+                filteredDates[votingDay][votingTime][voting.postproc[p.option_id].option]++;
+            }
+
+            console.log(voting.postproc);
+            console.log(filteredDates);
+
+            let dayDatasets = [],
+                options = [];
+            for(let j in Object.keys(filteredDates)) {
+                let dayResult = filteredDates[Object.keys(filteredDates)[j]];
+
+                let datasets = [];
+                for(let v of voting.postproc) {
+                    let data = {
+                        data: [],
+                        backgroundColor: colours,
+                        label: v.option
+                    };
+
+                    for(let i=0; i<24; i++) {
+                        if(Object.keys(dayResult).includes(String(i))) {
+                            console.log("asdasd", dayResult);
+                            console.log(i);
+                            let val = dayResult[String(i)];
+                            console.log("val" , val);
+                            for(let k of Object.keys(val)) {
+                                console.log("k" , dayResult[k]);
+                                console.log("v", v);
+                                if(v.option==k) {
+                                    data.data.push(val[k]);
+                                }
+                            }
+                        } else {
+                            data.data.push(0);
+                        }
+                    }
+                    datasets.push(data);
+                }
+
+                dayDatasets.push(datasets);
+            }
+
+            console.log(dayDatasets);
+
+            for(let d of dayDatasets) {
+
+                let canvas = document.createElement('canvas');
+                canvas.width = 600;
+                canvas.height = 350;
+
+                canvas = dateCharts.appendChild(canvas);
+
+                new Chart(canvas.getContext("2d"), {
+                    type: 'bar',
+                    data:{
+                        labels: ["00:00", "01:00", "02:00", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"],
+                        datasets: d,
+                        options
+                    },
+                    options
+                });
+
+                break;
+            }
+        });
+
        app.getVotingCount().then(data => {
            console.log(data);
            console.log(new Date(data[0].created_at));
