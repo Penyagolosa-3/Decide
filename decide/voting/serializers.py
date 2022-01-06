@@ -1,8 +1,7 @@
 from rest_framework import serializers
-
+from .validators import lofensivo
 from .models import Question, QuestionOption, Voting
 from base.serializers import KeySerializer, AuthSerializer
-
 
 class QuestionOptionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -12,6 +11,10 @@ class QuestionOptionSerializer(serializers.HyperlinkedModelSerializer):
 
 class QuestionSerializer(serializers.HyperlinkedModelSerializer):
     options = QuestionOptionSerializer(many=True)
+    def validate_desc(self, data):
+        if(lofensivo(data['desc'])):
+            raise serializers.ValidationError("Se ha detectado lenguaje ofensivo")
+        return data
     class Meta:
         model = Question
         fields = ('desc', 'options')
@@ -19,6 +22,7 @@ class QuestionSerializer(serializers.HyperlinkedModelSerializer):
 
 class VotingSerializer(serializers.HyperlinkedModelSerializer):
     question = QuestionSerializer(many=False)
+    lofensivo(question.Meta.fields[1])
     pub_key = KeySerializer()
     auths = AuthSerializer(many=True)
 

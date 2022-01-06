@@ -1,17 +1,44 @@
+from django.core.exceptions import ValidationError
+from . import validators
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
 from base import mods
 from base.models import Auth, Key
 
-
 class Question(models.Model):
     desc = models.TextField()
+    def clean(self):
+        if(validators.lofensivo(self.desc)):
+            raise ValidationError("Se ha detectado lenguaje ofensivo")
 
+    binary_question = models.BooleanField(default=False,verbose_name="Answers Yes/No", help_text="Check the box to generate a binary question")
     def __str__(self):
         return self.desc
+
+    YNNS_question = models.BooleanField(default=False,verbose_name="Answers Yes, No, NS/NC", help_text="Check the box to create a question of Yes, No or NS/NC")
+    def __str__(self):
+        return self.desc
+
+
+@receiver(post_save, sender=Question)
+def check_question(sender, instance, **kwargs):
+    if instance.binary_question==True and instance.options.all().count()==0:
+        option1 = QuestionOption(question=instance, number=1, option="Si")
+        option1.save()
+        option2 = QuestionOption(question=instance, number=2, option="No") 
+        option2.save()
+
+@receiver(post_save, sender=Question)
+def check_question(sender, instance, **kwargs):
+    if instance.YNNS_question==True and instance.options.all().count()==0:
+        option1 = QuestionOption(question=instance, number=1, option="Si")
+        option1.save()
+        option2 = QuestionOption(question=instance, number=2, option="No") 
+        option2.save()
+        option2 = QuestionOption(question=instance, number=3, option="NS/NC") 
+        option2.save()
 
 
 class QuestionOption(models.Model):
@@ -30,7 +57,7 @@ class QuestionOption(models.Model):
 
 class Voting(models.Model):
     name = models.CharField(max_length=200)
-    desc = models.TextField(blank=True, null=True)
+    desc = models.TextField(blank=True, null=True, validators=[validators.lofensivo])
     question = models.ForeignKey(Question, related_name='voting', on_delete=models.CASCADE)
 
     start_date = models.DateTimeField(blank=True, null=True)
