@@ -385,3 +385,27 @@ class PostProcTestCase(APITestCase):
         response = self.client.post('/postproci/', data, format='json')
         self.assertEqual(response.status_code, 404)
 
+    def test_dhondt_noVotes(self):
+        """
+            * Definición: Test negativo que no recibe votos
+            * Entrada: Votación
+                - Number: id del partido
+                - Option: nombre de la opción
+                - Votes: Numero de votos que recibe en la votación
+            * Salida: Código 200 con los datos de entrada junto con el postprocesado, de forma
+            que ningún partido recibe escaños
+        """
+
+        data = {
+            "type": "DHONDT",
+            "seats": 8,
+            "options": [
+                { "option": "Option 1", "number": 1, "votes": 0 },
+                { "option": "Option 2", "number": 2, "votes": 0 },
+                { "option": "Option 3", "number": 3, "votes": 0 },
+                { "option": "Option 4", "number": 4, "votes": 0 },
+                { "option": "Option 5", "number": 5, "votes": 0 },
+                { "option": "Option 6", "number": 6, "votes": 0 },
+            ]
+        }
+
