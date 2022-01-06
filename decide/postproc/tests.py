@@ -381,4 +381,7 @@ class PostProcTestCase(APITestCase):
                 { "option": "Option 6", "number": 6, "votes": 2 },
             ]
         }
+           
+        response = self.client.post('/postproci/', data, format='json')
+        self.assertEqual(response.status_code, 404)
 
