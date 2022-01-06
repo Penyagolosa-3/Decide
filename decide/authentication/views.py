@@ -21,7 +21,7 @@ class GetUserView(APIView):
         return Response(UserSerializer(tk.user, many=False).data)
 
 
-class LogoutView(APIView):
+class LogoutView2(APIView):
     def post(self, request):
         key = request.data.get('token', '')
         try:
@@ -48,7 +48,6 @@ class RegisterView(APIView):
         try:
             user = User(username=username)
             user.set_password(pwd)
-            user = User
             user.save()
             token, _ = Token.objects.get_or_create(user=user)
         except IntegrityError:

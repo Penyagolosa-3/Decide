@@ -1,10 +1,75 @@
+
 {% load socialaccount %}
 {% providers_media_js %}
 
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+    <script src="https://apis.google.com/js/api:client.js"></script>
+
+  
+  <style type="text/css">
+      #customBtn {
+        display: inline-block;
+        background: white;
+        color: #444;
+        width: 190px;
+        border-radius: 5px;
+        border: thin solid #888;
+        box-shadow: 1px 1px 1px grey;
+        white-space: nowrap;
+      }
+
+      #main{
+        text-align:center;
+        
+      }
+      #customBtn:hover {
+        cursor: pointer;
+      }
+      span.label {
+        font-family: serif;
+        font-weight: normal;
+      }
+      span.icon {
+        display: inline-block;
+        vertical-align: middle;
+        width: 20px;
+        height: 42px;
+      }
+      span.buttonText {
+        display: inline-block;
+        vertical-align: middle;
+        padding-left: 20px;
+        padding-right: 42px;
+        font-size: 14px;
+        font-weight: bold;
+        /* Use the Roboto font that is loaded in the <head> */
+        font-family: 'Roboto', sans-serif;
+      }
+    </style>
+  
+  
+  </head>
+  <body>
+  <div id="main">
+      <span class="label">Inicia sesión con:</span>
+    </br>
+    </br>
+      <div id="customBtn" class="customGPlusSignIn">
+        <span class="icon"></span>
+        <a href="{% provider_login_url "google" %}">
+        <span  class="buttonText">Google</span>
+    </a>
+      </div>
+    </div>
+</br>
+    {% if user.is_authenticated %}
+    estoy autenticado
+    <a href="{% url 'logoutG' %}">Logout</a>
+    {% endif %}
+</br>
+</br>
+     
+  </body>
 <a class="fab fa-microsoft size_social text-info" aria-hidden="true" href="{% provider_login_url "microsoft" %}">microsoft</a>
-<a class="fab fa-google size_social text-info" aria-hidden="true" href="{% provider_login_url "google" %}">Google</a>
-
-
-{% if user.is_authenticated %}
-estoy autenticado
-{% endif %}
+<a class="fab fa-github size_social text-info" aria-hidden="true" href="{% provider_login_url "github" %}">GitHub</a>
