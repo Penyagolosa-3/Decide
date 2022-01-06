@@ -47,23 +47,6 @@ class VotingTestCase(BaseTestCase):
 
         return v
 
-    def test_create_binary_voting(self):
-        q = Question(desc='binary voting', binary_question=True)
-        q.save()
-        
-        opt = QuestionOption(question=q)
-        opt.save()
-
-        v = Voting(name='test voting', question=q)
-        v.save()
-
-        a, _ = Auth.objects.get_or_create(url=settings.BASEURL,
-                                          defaults={'me': True, 'name': 'test auth'})
-        a.save()
-        v.auths.add(a)
-
-        return v
-
     def create_voters(self, v):
         for i in range(100):
             u, _ = User.objects.get_or_create(username='testvoter{}'.format(i))
@@ -122,6 +105,26 @@ class VotingTestCase(BaseTestCase):
 
         for q in v.postproc:
             self.assertEqual(tally.get(q["number"], 0), q["votes"])
+
+    def test_lofensivo_dont_pass(self):
+        self.login()
+        question = Question(desc='Tonto, esta descripcion contiene alguna palabra ofensiva? Pis, ceporro')
+        with self.assertRaises(ValidationError):
+            question.clean()
+
+    def test_lofensivo_pass_by_words(self):
+        self.login()
+        question = Question(desc='Esta descripcion no contiene lenguaje ofensivo')
+        question.clean()
+        self.assertEqual(question.desc, 'Esta descripcion no contiene lenguaje ofensivo')
+
+    def test_lofensivo_pass_by_percentage(self):
+        self.login()
+        question = Question(desc='Esta descripcion contiene solo una palabra ofensiva, tonto, pero se necesita que el 20 por ciento sean palabras ofensivas')
+        question.clean()
+        self.assertEqual(question.desc, 'Esta descripcion contiene solo una palabra ofensiva, tonto, pero se necesita que el 20 por ciento sean palabras ofensivas')
+        
+
 
     def test_create_voting_from_api(self):
         data = {'name': 'Example'}
