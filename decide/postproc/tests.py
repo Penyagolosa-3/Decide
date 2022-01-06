@@ -326,4 +326,27 @@ class PostProcTestCase(APITestCase):
 
         values = response.json()
         self.assertEqual(values, expected_result)  
+        
+    def test_dhondt_error(self):
+        """
+            * Definicion: Test negativo que no recibe escaños
+            * Entrada: Votacion
+                - Number: id del partido
+                - Option: nombre de la opcion
+                - Votes: Numero de votos que recibe en la votación
+            * Salida: Codigo 200 con mensaje de que no hay escaños suficientes para repartir
+        """
+
+        data = {
+            "type": "DHONDT",
+            "seats": 0,
+            "options": [
+                { "option": "Option 1", "number": 1, "votes": 10 },
+                { "option": "Option 2", "number": 2, "votes": 0 },
+                { "option": "Option 3", "number": 3, "votes": 0 },
+                { "option": "Option 4", "number": 4, "votes": 1 },
+                { "option": "Option 5", "number": 5, "votes": 4 },
+                { "option": "Option 6", "number": 6, "votes": 2 },
+            ]
+        }
 
