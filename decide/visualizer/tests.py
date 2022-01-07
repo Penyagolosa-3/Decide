@@ -66,9 +66,9 @@ class AdminTestCase(StaticLiveServerTestCase):
         self.driver.find_element_by_xpath('/html/body/div/div[3]/div/form/div/fieldset/div[4]/div/div[1]/a/img').click()
         window_after = self.driver.window_handles[1]
         self.driver.switch_to_window(window_after)
-        self.driver.find_element_by_id('id_name').send_keys("http://localhost:8000")
-        self.driver.find_element_by_id('id_url').send_keys("http://localhost:8000")
-        time.sleep(1)
+        self.driver.find_element_by_id('id_name').send_keys(self.live_server_url)
+        self.driver.find_element_by_id('id_url').send_keys(self.live_server_url)
+        time.sleep(3)
         self.driver.find_element_by_xpath('/html/body/div/div[1]/div/form/div/div/input').click()
         self.driver.switch_to_window(window_before)
         time.sleep(1)
@@ -114,16 +114,19 @@ class AdminTestCase(StaticLiveServerTestCase):
         self.driver.find_element_by_xpath('/html/body/div/div[3]/div/form/div/div/input[1]').click()
         time.sleep(2)
         self.assertTrue(len(self.driver.find_elements_by_xpath('//*[@id="result_list"]/tbody/tr'))==1)
+        time.sleep(2)
 
         #Se realiza la votacion
-        #self.driver.get(self.live_server_url+'/booth/1/')
-        #self.driver.find_element_by_id('username').send_keys("admin")
-        #self.driver.find_element_by_id('password').send_keys("qwerty", Keys.ENTER)
-        #time.sleep(1)
-        #self.driver.find_element_by_id('q1').click()
+        self.driver.find_element_by_link_text('Home').click()
+        time.sleep(2)
+        self.driver.get(self.live_server_url+'/booth/8')
+        time.sleep(3)
+        self.driver.find_element_by_id('username').send_keys("admin")
+        self.driver.find_element_by_id('password').send_keys("qwerty", Keys.ENTER)
+        self.driver.find_element_by_id('q1').click()
 
-        #self.driver.find_element_by_xpath('/html/body/div/div/div/button').click()
-        #time.sleep(2)
+        self.driver.find_element_by_xpath('/html/body/div/div/div/button').click()
+        time.sleep(5)
 
 
     def tearDown(self):          
