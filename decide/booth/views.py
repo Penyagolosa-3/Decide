@@ -2,6 +2,8 @@ import json
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.http import Http404
+from voting.models import Voting
+from django.shortcuts import render, redirect
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -57,6 +59,7 @@ class BoothVotingCountView(APIView):
 
         return Response({'votingCount': VotingCountSerializer(votingCount, many=True).data, 'census': len(census)})
 
+
 # TODO: check permissions and census
 class BoothView(TemplateView):
     template_name = 'booth/booth.html'
@@ -84,3 +87,8 @@ class BoothView(TemplateView):
         context['KEYBITS'] = settings.KEYBITS
 
         return context
+
+def votings(request):
+    votings = Voting.objects.exclude(end_date__isnull = False) 
+    return render(request, 'booth/votings.html', {'votings': votings})
+

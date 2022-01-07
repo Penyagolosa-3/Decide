@@ -1,11 +1,14 @@
 from django.contrib import admin
 from django.utils import timezone
 
+
 from .models import QuestionOption
 from .models import Question
 from .models import Voting
 
+
 from .filters import StartedFilter
+
 
 
 def start(modeladmin, request, queryset):
@@ -34,7 +37,6 @@ class QuestionOptionInline(admin.TabularInline):
 class QuestionAdmin(admin.ModelAdmin):
     inlines = [QuestionOptionInline]
 
-
 class VotingAdmin(admin.ModelAdmin):
     list_display = ('name', 'start_date', 'end_date')
     readonly_fields = ('start_date', 'end_date', 'pub_key',
@@ -44,6 +46,7 @@ class VotingAdmin(admin.ModelAdmin):
     search_fields = ('name', )
 
     actions = [ start, stop, tally ]
+
 
 
 admin.site.register(Voting, VotingAdmin)

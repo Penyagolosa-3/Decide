@@ -24,7 +24,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -33,6 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.sites',
     'django.contrib.staticfiles',
 
     'corsheaders',
@@ -41,6 +41,15 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework_swagger',
     'gateway',
+
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.microsoft',
+    'allauth.socialaccount.providers.azure',
+    'allauth.socialaccount.providers.google',
+
 ]
 
 REST_FRAMEWORK = {
@@ -67,7 +76,21 @@ MODULES = [
     'voting',
 ]
 
+
 BASEURL = 'http://localhost:8000'
+
+APIS = {
+    'authentication': BASEURL,
+    'base': BASEURL,
+    'booth': BASEURL,
+    'census': BASEURL,
+    'mixnet': BASEURL,
+    'postproc': BASEURL,
+    'store': BASEURL,
+    'visualizer': BASEURL,
+    'voting': BASEURL,
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -109,7 +132,7 @@ DATABASES = {
         'NAME': 'decide',
         'USER': 'decide',
         'PASSWORD': 'decide',
-        'HOST': 'localhost',
+        'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }
@@ -176,4 +199,21 @@ if os.path.exists("config.jsonnet"):
         vars()[k] = v
 
 
+
 INSTALLED_APPS = INSTALLED_APPS + MODULES
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
+)
+
+SITE_ID = 2
+
+LOGIN_REDIRECT_URL = '/'
+
+NOSE_ARGS = [
+    '--with-xunit'
+]
+
+import django_heroku
+django_heroku.settings(locals(),test_runner=False)
