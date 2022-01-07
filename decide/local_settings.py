@@ -13,6 +13,7 @@ MODULES = [
     'voting',
 ]
 
+
 BASEURL = 'http://localhost:8000'
 
 APIS = {
@@ -39,6 +40,7 @@ DATABASES = {
 }
 
 # number of bits for the key, all auths should use the same number of bits
+
 
 KEYBITS = 256
 
