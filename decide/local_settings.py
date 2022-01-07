@@ -13,7 +13,8 @@ MODULES = [
     'voting',
 ]
 
-BASEURL = 'https://decide-penyagolosa.herokuapp.com/'
+
+BASEURL = 'http://localhost:8000'
 
 APIS = {
     'authentication': BASEURL,
@@ -39,6 +40,7 @@ DATABASES = {
 }
 
 # number of bits for the key, all auths should use the same number of bits
+
 
 KEYBITS = 256
 

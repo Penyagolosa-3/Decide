@@ -43,13 +43,6 @@ INSTALLED_APPS = [
     'gateway',
 
 
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.microsoft',
-    'allauth.socialaccount.providers.azure',
-    'allauth.socialaccount.providers.google',
-
 ]
 
 REST_FRAMEWORK = {
@@ -77,7 +70,7 @@ MODULES = [
 ]
 
 
-BASEURL = 'https://decide-penyagolosa.herokuapp.com'
+BASEURL = 'http://localhost:8000'
 
 APIS = {
     'authentication': BASEURL,
@@ -129,10 +122,10 @@ WSGI_APPLICATION = 'decide.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd9k0cu1rtpjq09',
-        'USER': 'aadmjtiqvdltdv',
-        'PASSWORD': '88bbce7f4e921bee0c13387a490c9f9c017ed510aeba36c1c7b99612425c59c7',
-        'HOST': 'ec2-52-17-1-206.eu-west-1.compute.amazonaws.com',
+        'NAME': 'decide',
+        'USER': 'decide',
+        'PASSWORD': 'decide',
+        'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }
@@ -199,20 +192,22 @@ if os.path.exists("config.jsonnet"):
         vars()[k] = v
 
 
+
 INSTALLED_APPS = INSTALLED_APPS + MODULES
 
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend'
-)
+#AUTHENTICATION_BACKENDS = (
+ #   'django.contrib.auth.backends.ModelBackend',
+  #  'allauth.account.auth_backends.AuthenticationBackend'
+#)
 
-SITE_ID = 2
+#SITE_ID = 2
 
-LOGIN_REDIRECT_URL = '/'
+#LOGIN_REDIRECT_URL = '/'
 
-NOSE_ARGS = [
-    '--with-xunit'
-]
+#NOSE_ARGS = [
+    #'--with-xunit'
+#]
 
-import django_heroku
-django_heroku.settings(locals(),test_runner=False)
+
+#import django_heroku
+#django_heroku.settings(locals(),test_runner=False)
