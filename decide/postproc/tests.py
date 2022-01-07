@@ -51,7 +51,7 @@ class PostProcTestCase(APITestCase):
                 - Option: Nombre de la opción
                 - Votes: Número de votos que recibe en la votación
                 - Group: Grupo de votación al que pertenece
-            * Salida: Los datos de entrada con un nuevo parámetro llamado total
+            * Salida: Los datos de entrada con un nuevo parámetro llamado postproc
             que supone el valor de esa opción tras aplicar el algoritmo
         """        
         data = {
@@ -66,12 +66,12 @@ class PostProcTestCase(APITestCase):
             ]
         }
         expected_result = [
-                { "option": "Option 2", "number": 2, "votes": 26, "group":"g1", "total": 114},
-                { "option": "Option 3", "number": 3, "votes": 9, "group":"g1", "total": 76},
-                { "option": "Option 1", "number": 4, "votes": 12, "group":"g2", "total": 63},
-                { "option": "Option 2", "number": 5, "votes": 7, "group":"g2", "total": 42},
-                { "option": "Option 1", "number": 1, "votes": 3, "group":"g1", "total": 38},
-                { "option": "Option 3", "number": 6, "votes": 2, "group":"g2", "total": 21}
+                { "option": "Option 2", "number": 2, "votes": 26, "group":"g1", "postproc": 114},
+                { "option": "Option 3", "number": 3, "votes": 9, "group":"g1", "postproc": 76},
+                { "option": "Option 1", "number": 4, "votes": 12, "group":"g2", "postproc": 63},
+                { "option": "Option 2", "number": 5, "votes": 7, "group":"g2", "postproc": 42},
+                { "option": "Option 1", "number": 1, "votes": 3, "group":"g1", "postproc": 38},
+                { "option": "Option 3", "number": 6, "votes": 2, "group":"g2", "postproc": 21}
                 
             ]
 
@@ -391,7 +391,7 @@ class PostProcTestCase(APITestCase):
                 - Option: Nombre de la opcion
                 - Votes: Número de votos que recibe en la votación
                 - Group: Grupo de votación al que pertenece
-            * Salida: Los datos de entrada con un nuevo parámetro llamado total
+            * Salida: Los datos de entrada con un nuevo parámetro llamado postproc
             que supone el valor de esa opción tras aplicar el algoritmo
         """        
         data = {
@@ -405,9 +405,9 @@ class PostProcTestCase(APITestCase):
 
         expected_result = [
 
-                { "option": "Option 1", "number": 1, "votes": 10, "group":"g1", "total":75 },
-                { "option": "Option 3", "number": 3, "votes": 8, "group":"g1", "total": 50},
-                { "option": "Option 2", "number": 2, "votes": 7, "group":"g1", "total":25}   
+                { "option": "Option 1", "number": 1, "votes": 10, "group":"g1", "postproc":75 },
+                { "option": "Option 3", "number": 3, "votes": 8, "group":"g1", "postproc": 50},
+                { "option": "Option 2", "number": 2, "votes": 7, "group":"g1", "postproc":25}   
             ]
 
         response = self.client.post("/postproc/", data, format="json")
@@ -548,7 +548,7 @@ class PostProcTestCase(APITestCase):
                 - Option: Nombre de la opción
                 - Votes: Número de votos que recibe en la votación
                 - Group: Grupo de votación al que pertenece
-            * Salida: Los datos de entrada con un nuevo parámetro llamado total
+            * Salida: Los datos de entrada con un nuevo parámetro llamado postproc
             que supone el valor de esa opción tras aplicar el algoritmo
         """        
 
@@ -568,15 +568,15 @@ class PostProcTestCase(APITestCase):
             ]
         }
         expected_result = [
-                { "option": "Option 2", "number": 2, "votes": 453, "group":"g1", "total":2400},
-                { "option": "Option 2", "number": 8, "votes": 334, "group":"g3", "total":2394},
-                { "option": "Option 3", "number": 3, "votes": 242, "group":"g1", "total":1600},
-                { "option": "Option 3", "number": 9, "votes": 234, "group":"g3", "total":1596},
-                { "option": "Option 1", "number": 1, "votes": 105, "group":"g1", "total":800},
-                { "option": "Option 1", "number": 7, "votes": 230, "group":"g3", "total":798},
-                { "option": "Option 1", "number": 4, "votes": 67, "group":"g2","total":405},
-                { "option": "Option 3", "number": 6, "votes": 45, "group":"g2", "total":270},
-                { "option": "Option 2", "number": 5, "votes": 23, "group":"g2", "total":135}
+                { "option": "Option 2", "number": 2, "votes": 453, "group":"g1", "postproc":2400},
+                { "option": "Option 2", "number": 8, "votes": 334, "group":"g3", "postproc":2394},
+                { "option": "Option 3", "number": 3, "votes": 242, "group":"g1", "postproc":1600},
+                { "option": "Option 3", "number": 9, "votes": 234, "group":"g3", "postproc":1596},
+                { "option": "Option 1", "number": 1, "votes": 105, "group":"g1", "postproc":800},
+                { "option": "Option 1", "number": 7, "votes": 230, "group":"g3", "postproc":798},
+                { "option": "Option 1", "number": 4, "votes": 67, "group":"g2","postproc":405},
+                { "option": "Option 3", "number": 6, "votes": 45, "group":"g2", "postproc":270},
+                { "option": "Option 2", "number": 5, "votes": 23, "group":"g2", "postproc":135}
                 
             ]
 
