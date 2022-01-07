@@ -8,11 +8,21 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 
+from voting.models import Voting, QuestionOption, Question
+
+from census.models import Census
+
+from booth.models import VotingCount
+
+from django.utils import timezone
+
 from base.tests import BaseTestCase
 import time
 
-class AdminTestCase(StaticLiveServerTestCase):
+from django.contrib.auth.models import User
+from mixnet.models import Auth
 
+class AdminTestCase(StaticLiveServerTestCase):
 
     def setUp(self):
         #Load base test functionality for decide
@@ -158,3 +168,77 @@ class VisualizerTestCase(VotingTestCase):
         data2 = {'update_id': 339892900, 'message': {'message_id': 287, 'from': {'id': 2004953283, 'is_bot': False, 'first_name': 'Lui', 'language_code': 'es'}, 'chat': {'id': 0, 'first_name': 'Lui', 'type': 'private'}, 'date': 1640018174, 'text': '/visualizer {}'.format(votingpk), 'entities': [{'offset': 0, 'length': 11, 'type': 'bot_command'}]}}
         response = self.client.post('/webhooks', data2, format='json')
         self.assertEqual(response.status_code, 301)
+
+
+class LiveVotingCountTestCase(StaticLiveServerTestCase):
+    def setUp(self):
+        self.base = BaseTestCase()
+        self.base.setUp()
+
+        self.voter = User(username='testitoValiente')
+        self.voter.set_password('qwerty')
+        self.voter.is_active = True
+        self.voter.save()
+
+        self.voting = self.create_voting()
+
+        c = Census(voter_id=self.voter.id, voting_id=self.voting.id)
+        c.save()
+
+        options = webdriver.ChromeOptions()
+        options.headless = True
+
+        super().setUp()
+
+    def tearDown(self):          
+        super().tearDown()
+
+        self.base.tearDown()
+
+    def create_voting(self):
+        q = Question(desc='test question')
+        q.save()
+        for i in range(5):
+            opt = QuestionOption(question=q, option='option {}'.format(i+1))
+            opt.save()
+        v = Voting(name='test voting', question=q)
+        v.save()
+
+        a, _ = Auth.objects.get_or_create(url=self.live_server_url,
+                                          defaults={'me': True, 'name': 'test auth'})
+        a.save()
+        v.auths.add(a)
+
+        v.create_pubkey()
+        v.start_date = timezone.now()
+        v.save()
+
+        return v
+
+    def test_showLiveVotingCount(self):
+        visualizer = webdriver.Chrome()
+
+        visualizer.get(self.live_server_url+'/visualizer/'+str(self.voting.id)+'/')
+
+        voter = webdriver.Chrome()
+        voter.get(self.live_server_url+'/booth/'+str(self.voting.id)+'/')
+        voter.find_element_by_id("username").clear()
+        voter.find_element_by_id("username").send_keys(self.voter.username)
+        voter.find_element_by_id("password").clear()
+        voter.find_element_by_id("password").send_keys("qwerty")
+        voter.find_element_by_xpath("//button[@type='submit']").click()
+        time.sleep(2)
+
+        firstVal = visualizer.find_element(by=By.XPATH, value="//div[@id='app-visualizer']/div/div/table/tbody/tr/td[2]").text
+
+        voter.find_element_by_id("q1").click()
+        voter.find_element_by_xpath("//button[@type='button']").click()
+        time.sleep(2)
+
+        secondVal = visualizer.find_element(by=By.XPATH, value="//div[@id='app-visualizer']/div/div/table/tbody/tr/td[2]").text
+
+        visualizer.quit()
+        voter.quit()
+
+        self.assertEqual(int(firstVal)+1, int(secondVal))
+        
