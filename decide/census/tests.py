@@ -105,3 +105,15 @@ class ExportActionAdminIntegrationTest(TestCase):
         self.assertFalse(response.has_header("Content-Disposition"))
         self.assertEqual(response['Content-Type'],
                          'text/html; charset=utf-8')
+
+    def test_import(self):
+        response = self.client.get('/admin/census/census/import/')
+        self.assertEqual(response.status_code, 302)
+
+        data = {
+            'file_format': '0',
+            }
+        response = self.client.post('/admin/census/census/import/', data)
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(response.has_header("Content-Disposition"))
+        self.assertEqual(response['Content-Type'], 'text/html; charset=utf-8')
