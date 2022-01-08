@@ -2,6 +2,7 @@ import random
 from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework.test import APIClient
+from django.db import utils
 
 from .models import Census
 from base import mods
@@ -18,6 +19,28 @@ class CensusTestCase(BaseTestCase):
     def tearDown(self):
         super().tearDown()
         self.census = None
+
+    def test_ExistCensus(self):
+        c=Census.objects.get(voting_id='1')
+        self.assertEquals(c.voting_id ,1)
+        self.assertEquals(c.voter_id ,1)
+
+    def test_NotExistCensus(self):
+        cs=Census.objects.all()
+        for c in cs:
+            self.assertNotEquals(c.voting_id ,10000)
+    
+    def test_equalsCensus(self):
+        self.census = Census(voting_id=1, voter_id=1)
+        try:
+            self.census.save()
+        except utils.IntegrityError:
+            error = True
+        self.assertEquals(error ,True)
+
+    
+        
+
 
     def test_check_vote_permissions(self):
         response = self.client.get('/census/{}/?voter_id={}'.format(1, 2), format='json')
