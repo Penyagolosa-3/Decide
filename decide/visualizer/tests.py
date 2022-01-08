@@ -123,10 +123,11 @@ class AdminTestCase(StaticLiveServerTestCase):
         time.sleep(3)
         self.driver.find_element_by_id('username').send_keys("admin")
         self.driver.find_element_by_id('password').send_keys("qwerty", Keys.ENTER)
-        self.driver.find_element_by_id('q1').click()
-
-        self.driver.find_element_by_xpath('/html/body/div/div/div/button').click()
-        time.sleep(5)
+        time.sleep(2)
+        self.driver.find_element_by_xpath('/html/body/div/div/div/fieldset[1]/div/div/input').click()
+        time.sleep(2)
+        self.driver.find_element_by_xpath("//button[@type='button']").click()
+        time.sleep(10)
 
 
     def tearDown(self):          
