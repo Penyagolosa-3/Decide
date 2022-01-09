@@ -1,9 +1,8 @@
 import random
 from django.contrib.auth.models import User
-from django.test import TestCase
 from rest_framework.test import APIClient
+from django.test import TestCase
 from django.db import utils
-
 from .models import Census
 from base import mods
 from base.tests import BaseTestCase
@@ -96,3 +95,47 @@ class CensusTestCase(BaseTestCase):
         response = self.client.delete('/census/{}/'.format(1), data, format='json')
         self.assertEqual(response.status_code, 204)
         self.assertEqual(0, Census.objects.count())
+
+#Test marmarave
+class ExportActionAdminIntegrationTest(TestCase):
+
+    def setUp(self):        
+        self.client.login(username='decide', password='decide')
+    
+    def test_export(self):
+        response = self.client.get('/admin/census/census/export/')
+        self.assertEqual(response.status_code, 302)
+
+        data = {
+            'file_format': '0',
+            }
+        response = self.client.post('/admin/census/census/export/', data)
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(response.has_header("Content-Disposition"))
+        self.assertEqual(response['Content-Type'], 'text/html; charset=utf-8')
+        
+    def test_returns_xlsx_export(self):
+        response = self.client.get('/admin/census/census//export/')
+        self.assertEqual(response.status_code, 302)
+
+        data = {
+            'file_format': '2',
+            }
+        
+        response = self.client.post('/admin/census/census/export/', data)
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(response.has_header("Content-Disposition"))
+        self.assertEqual(response['Content-Type'],
+                         'text/html; charset=utf-8')
+
+    def test_import(self):
+        response = self.client.get('/admin/census/census/import/')
+        self.assertEqual(response.status_code, 302)
+
+        data = {
+            'file_format': '0',
+            }
+        response = self.client.post('/admin/census/census/import/', data)
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(response.has_header("Content-Disposition"))
+        self.assertEqual(response['Content-Type'], 'text/html; charset=utf-8')
