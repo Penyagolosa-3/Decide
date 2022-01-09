@@ -34,7 +34,7 @@ class TestPp():
     self.driver.find_element(By.ID, "i0116").send_keys("innosoft2021.166@gmail.com")
     time.sleep(5)
     self.driver.find_element(By.ID, "idSIButton9").click()
-    assert self.driver.find_element(By.ID, "usernameError").text == "No hemos podido encontrar ninguna cuenta con ese nombre de usuario. Escriba otra dirección u obtenga una nueva cuenta de Microsoft."  
+    assert self.driver.find_element(By.ID, "usernameError").text == "No hemos podido encontrar ninguna cuenta con ese nombre de usuario. Escriba otra dirección u obtenga una nueva cuenta de Microsoft."
   def test_contrasenya(self):
     self.driver = webdriver.Chrome()
     self.driver.get("http://localhost:8000/booth/voting")
@@ -69,7 +69,7 @@ class TestPp():
     self.driver.find_element(By.ID, "q2").click()
     time.sleep(5)
     self.driver.find_element(By.CSS_SELECTOR, ".btn").click()
-    assert self.driver.find_element(By.CSS_SELECTOR, "h2").text == "prueba"  
+    assert self.driver.find_element(By.CSS_SELECTOR, "h2").text == "prueba"
   def test_logout(self):
     self.driver = webdriver.Chrome()
     self.driver.get("http://localhost:8000/booth/voting")
