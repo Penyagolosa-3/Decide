@@ -6,10 +6,8 @@ class TestLogin():
   def setup_method(self, method):
     self.driver = webdriver.Chrome()
     self.vars = {}
-
   def teardown_method(self, method):
     self.driver.quit()
-  
   def test_login(self):
     self.driver = webdriver.Chrome()
     self.driver.get("http://localhost:8000/booth/voting")
@@ -21,8 +19,6 @@ class TestLogin():
     self.driver.find_element(By.CSS_SELECTOR, ".btn").click()
     time.sleep(1)
     assert self.driver.find_element(By.CSS_SELECTOR, "h2").text == "prueba"
-
-
   def test_loginYvotar(self):
     self.driver = webdriver.Chrome()
     self.driver.get("http://localhost:8000/booth/voting")
@@ -37,7 +33,6 @@ class TestLogin():
     self.driver.find_element(By.CSS_SELECTOR, ".btn").click()
     time.sleep(1)
     assert self.driver.find_element(By.ID, "q2").is_selected() is True
-
   def test_logout(self):
     self.driver = webdriver.Chrome()
     self.driver.get("http://localhost:8000/booth/voting")

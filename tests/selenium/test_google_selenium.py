@@ -9,7 +9,6 @@ class TestPrueba():
     self.vars = {}
   def teardown_method(self, method):
     self.driver.quit()
-  
   def test_ventanaDeLogeo(self):
     self.driver = webdriver.Chrome()
     self.driver.get("http://localhost:8000/booth/voting")
@@ -17,7 +16,6 @@ class TestPrueba():
     self.driver.find_element(By.CSS_SELECTOR, "tr:nth-child(3) a").click()
     self.driver.find_element(By.XPATH, "//div[@id=\'customBtn\']/a/span").click()
     assert self.driver.find_element(By.CSS_SELECTOR, "#headingText > span").text == "Iniciar sesión"
-
   def test_cuentaNoExistente(self):
     self.driver = webdriver.Chrome()
     self.driver.get("http://localhost:8000/booth/voting")
@@ -31,7 +29,6 @@ class TestPrueba():
     element = self.driver.find_element(By.CSS_SELECTOR, "body")
     actions = ActionChains(self.driver)
     assert self.driver.find_element(By.CSS_SELECTOR, ".o6cuMc").text == "No se ha podido encontrar tu cuenta de Google"
-
   def test_usuariosiexiste(self):
     self.driver = webdriver.Chrome()
     self.driver.get("http://localhost:8000/booth/voting")
