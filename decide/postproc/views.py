@@ -58,7 +58,7 @@ class PostProcView(APIView):
         else:
             for opt in options:
                 # Añadimos a todas las opciones el atributo 'total'
-                opt['total'] = 0
+                opt['postproc'] = 0
         
             #Agrupamos las opciones según el grupo de votación al que pertenezcan
             grp = self.groups(options)
@@ -78,12 +78,12 @@ class PostProcView(APIView):
                 # Se aplica el algoritmo de borda
                 for l in lista:
                     puntuacion = votosTotales * contador
-                    l['total'] = puntuacion
+                    l['postproc'] = puntuacion
                     res.append(l)
                     contador += 1
                 
             # Tras aplicar el algoritmo, se ordenan las opciones según su puntuación total
-            res.sort(key=lambda x:x['total'], reverse=True)
+            res.sort(key=lambda x:x['postproc'], reverse=True)
 
         return Response(res) 
 
