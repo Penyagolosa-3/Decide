@@ -18,6 +18,8 @@ import time
 from django.contrib.auth.models import User
 from mixnet.models import Auth
 
+from booth.models import VotingCount
+
 class LiveVotingCountTestCase(StaticLiveServerTestCase):
     def setUp(self):
         self.base = BaseTestCase()
@@ -28,15 +30,18 @@ class LiveVotingCountTestCase(StaticLiveServerTestCase):
         self.voter.is_active = True
         self.voter.save()
 
-        self.voting = self.create_voting()
-
-        c = Census(voter_id=self.voter.id, voting_id=self.voting.id)
-        c.save()
-
         options = webdriver.ChromeOptions()
         options.headless = True
 
         super().setUp()
+
+    def scena(self):
+        voting = self.create_voting()
+
+        c = Census(voter_id=self.voter.id, voting_id=voting.id)
+        c.save()
+
+        return voting
 
     def tearDown(self):          
         super().tearDown()
@@ -44,8 +49,8 @@ class LiveVotingCountTestCase(StaticLiveServerTestCase):
         self.base.tearDown()
 
     def create_voting(self):
-        q = Question(desc='test question')
-        q.save()
+        q = Question.objects.get_or_create(desc='test question')
+        
         for i in range(5):
             opt = QuestionOption(question=q, option='option {}'.format(i+1))
             opt.save()
@@ -63,13 +68,42 @@ class LiveVotingCountTestCase(StaticLiveServerTestCase):
 
         return v
 
-    def test_showLiveVotingCount(self):
-        visualizer = webdriver.Chrome()
+    def test_registerVoteCount(self):
+        voting = self.scena()
 
-        visualizer.get(self.live_server_url+'/visualizer/'+str(self.voting.id)+'/')
+        votingCount = VotingCount.objects.filter(voting_id=voting.id)
+        first = len(votingCount)
 
         voter = webdriver.Chrome()
-        voter.get(self.live_server_url+'/booth/'+str(self.voting.id)+'/')
+        voter.get(self.live_server_url+'/booth/'+str(voting.id)+'/')
+        voter.find_element_by_id("username").clear()
+        voter.find_element_by_id("username").send_keys(self.voter.username)
+        voter.find_element_by_id("password").clear()
+        voter.find_element_by_id("password").send_keys("qwerty")
+        voter.find_element_by_xpath("//button[@type='submit']").click()
+        time.sleep(2)
+
+        voter.find_element(by=By.XPATH, value="/html/body/div/div/div/fieldset[1]/div/div/input").click()
+        voter.find_element_by_xpath("//button[@type='button']").click()
+        time.sleep(1)
+        voter.quit()
+        time.sleep(2)
+
+        votingCount = VotingCount.objects.filter(voting_id=voting.id)
+        after = len(votingCount)
+
+        self.assertEqual(first+1, after)
+
+    def test_showLiveVotingCount(self):
+
+        voting = self.scena()
+
+        visualizer = webdriver.Chrome()
+
+        visualizer.get(self.live_server_url+'/visualizer/'+str(voting.id)+'/')
+
+        voter = webdriver.Chrome()
+        voter.get(self.live_server_url+'/booth/'+str(voting.id)+'/')
         voter.find_element_by_id("username").clear()
         voter.find_element_by_id("username").send_keys(self.voter.username)
         voter.find_element_by_id("password").clear()
@@ -87,7 +121,7 @@ class LiveVotingCountTestCase(StaticLiveServerTestCase):
 
         secondVal = visualizer.find_element(by=By.XPATH, value="//div[@id='app-visualizer']/div/div/table/tbody/tr/td[2]").text
 
-        self.assertEqual(int(firstVal)+1, int(secondVal))
-
         visualizer.quit()
+
+        self.assertEqual(int(firstVal)+1, int(secondVal))
         
