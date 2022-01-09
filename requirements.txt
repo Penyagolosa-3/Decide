@@ -14,3 +14,4 @@ gunicorn
 django-allauth==0.43.0
 selenium
 urllib3
+django-import-export

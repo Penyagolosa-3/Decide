@@ -9,6 +9,8 @@ jobs:
     strategy:
       matrix:
         pyversion: ['3.5','3.8']
+
+
     services:
       postgres:
         image: postgres:10.8
@@ -38,6 +40,13 @@ jobs:
       run: cd decide;python manage.py migrate
     - name: Run tests postproc   
       run: cd decide;coverage run --branch --source=. ./manage.py test postproc --keepdb; coverage xml;
+      
+    - name: Run tests authentication
+      run: cd decide;coverage run --branch --source=. ./manage.py test authentication --keepdb; coverage xml;
+      
+    - name: Run tests census
+      run: cd decide;coverage run --branch --source=. ./manage.py test census --keepdb; coverage xml;
+      
     - name: Codacy Coverage Reporter
       uses: codacy/codacy-coverage-reporter-action@v1.1.0
       with:
