@@ -1,6 +1,5 @@
 import random
 from django.contrib.auth.models import User
-from django.test import TestCase
 from rest_framework.test import APIClient
 
 from .models import Census
