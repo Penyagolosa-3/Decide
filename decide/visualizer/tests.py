@@ -24,19 +24,99 @@ from django.utils import timezone
 
 class AdminTestCase(StaticLiveServerTestCase):
 
-
     def setUp(self):
-        #Load base test functionality for decide
         self.base = BaseTestCase()
         self.base.setUp()
 
+        self.voter = User(username='testitoValiente')
+        self.voter.set_password('qwerty')
+        self.voter.is_active = True
+        self.voter.save()
+
         options = webdriver.ChromeOptions()
         options.headless = True
-        self.driver = webdriver.Chrome()
 
-        super().setUp()           
+        super().setUp()
+
+    def tearDown(self):          
+        super().tearDown()
+
+        self.base.tearDown()
+
+    def create_voting(self):
+        q = Question(desc='test question')
+        q.save()
+        for i in range(5):
+            opt = QuestionOption(question=q, option='option {}'.format(i+1))
+            opt.save()
+        v = Voting(name='test voting', question=q)
+        v.save()
+
+        a, _ = Auth.objects.get_or_create(url=self.live_server_url, defaults={'me': True, 'name': 'test auth'})
+        a.save()
+        v.auths.add(a)
+        v.save()
+
+        v.create_pubkey()
+        v.start_date = timezone.now()
+        v.save()
+
+        return v
 
     def test_visualizer(self):
+
+        self.voting = self.create_voting()
+
+        c = Census(voter_id=self.voter.id, voting_id=self.voting.id)
+        c.save()
+
+        voter = webdriver.Chrome()
+        voter.get(self.live_server_url)
+        voter.get(self.live_server_url+'/booth/'+str(self.voting.id)+'/')
+        voter.find_element_by_id("username").clear()
+        voter.find_element_by_id("username").send_keys(self.voter.username)
+        voter.find_element_by_id("password").clear()
+        voter.find_element_by_id("password").send_keys("qwerty")
+        voter.find_element_by_xpath("//button[@type='submit']").click()
+        time.sleep(2)
+
+        
+        voter.find_element(by=By.XPATH, value="/html/body/div/div/div/fieldset[1]/div/div/input").click()
+        time.sleep(2)
+        voter.find_element_by_xpath("//button[@type='button']").click()
+        time.sleep(2)
+        #voter.quit()
+
+        visualizer = webdriver.Chrome()
+        visualizer.get(self.live_server_url+'/visualizer/'+str(self.voting.id)+'/')
+        time.sleep(2)
+        visualizer.quit()
+
+        voter.get(self.live_server_url+'/admin')
+        voter.find_element_by_id('id_username').send_keys("admin")
+        voter.find_element_by_id('id_password').send_keys("qwerty",Keys.ENTER)
+        time.sleep(2)
+
+        voter.find_element_by_xpath('/html/body/div/div[2]/div[1]/div[10]/table/tbody/tr[2]/th/a').click()
+        time.sleep(2)
+        #Selecciono la votación
+        voter.find_element_by_xpath('/html/body/div/div[3]/div/div/form/div[2]/table/tbody/tr[1]/td[1]/input').click()
+        time.sleep(1)
+        #La detengo
+        voter.find_element_by_xpath('/html/body/div/div[3]/div/div/form/div[1]/label/select/option[4]').click()
+        voter.find_element_by_xpath('/html/body/div/div[3]/div/div/form/div[1]/button').click()
+        time.sleep(3)
+        #Selecciono la votacion y tally
+        voter.find_element_by_xpath('/html/body/div/div[3]/div/div/form/div[2]/table/tbody/tr[1]/td[1]/input').click()
+        time.sleep(1)
+        voter.find_element_by_xpath('/html/body/div/div[3]/div/div/form/div[1]/label/select/option[5]').click()
+        time.sleep(1)
+        voter.find_element_by_xpath('/html/body/div/div[3]/div/div/form/div[1]/button').click()
+        time.sleep(4)
+        voter.quit()
+
+'''
+    def test_visualizer2(self):
         self.driver.get(self.live_server_url+'/admin/')
         self.driver.find_element_by_id('id_username').send_keys("admin")
         self.driver.find_element_by_id('id_password').send_keys("qwerty",Keys.ENTER)
@@ -139,15 +219,7 @@ class AdminTestCase(StaticLiveServerTestCase):
         time.sleep(2)
         self.driver.find_element_by_xpath("//button[@type='button']").click()
         time.sleep(10)
-
-
-
-    def tearDown(self):          
-        super().tearDown()
-        self.driver.quit()
-
-        self.base.tearDown()
-
+'''
 
 class VisualizerTestCase(VotingTestCase):
 
