@@ -9,6 +9,8 @@ jobs:
     strategy:
       matrix:
         pyversion: ['3.5','3.8']
+
+
     services:
       postgres:
         image: postgres:10.8
@@ -36,13 +38,13 @@ jobs:
         pip install codacy-coverage
     - name: Run migrations
       run: cd decide;python manage.py migrate
-    - name: Run tests authentication   
-      run: cd decide;coverage run --branch --source=. ./manage.py test authentication --keepdb; coverage xml;
-    - name: Run tests census    
-      run: cd decide;coverage run --branch --source=. ./manage.py test census --keepdb; coverage xml;
+
+
+    - name: Run tests     
+
+      run: cd decide;coverage run --branch --source=. ./manage.py test --keepdb; coverage xml;
     - name: Codacy Coverage Reporter
       uses: codacy/codacy-coverage-reporter-action@v1.1.0
       with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-
           coverage-reports: decide/coverage.xml
