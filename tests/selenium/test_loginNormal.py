@@ -3,7 +3,6 @@ import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 class TestLogin():
-  
   def setup_method(self, method):
     self.driver = webdriver.Chrome()
     self.vars = {}
