@@ -14,7 +14,12 @@ from locust import (
 HOST = "http://localhost:8000"
 VOTING = 1
 
+class DefGithubAuthenticationRedirection(TaskSet):
 
+    @task
+    def index(self):
+        self.client.get("/authentication/accounts/github/login/")
+        
 class DefVisualizer(TaskSet):
 
     @task
@@ -72,4 +77,9 @@ class Visualizer(HttpUser):
 class Voters(HttpUser):
     host = HOST
     tasks = [DefVoters]
+    wait_time= between(3,5)
+
+class GithubAuthenticationRedirection(HttpUser):
+    host = HOST
+    tasks = [DefGithubAuthenticationRedirection]
     wait_time= between(3,5)

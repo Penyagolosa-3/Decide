@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
-
+from django.core.exceptions import ValidationError
 from base import mods
 from base.tests import BaseTestCase
 from census.models import Census
@@ -105,6 +105,26 @@ class VotingTestCase(BaseTestCase):
 
         for q in v.postproc:
             self.assertEqual(tally.get(q["number"], 0), q["votes"])
+
+    def test_lofensivo_dont_pass(self):
+        self.login()
+        question = Question(desc='Tonto, esta descripcion contiene alguna palabra ofensiva? Pis, ceporro')
+        with self.assertRaises(ValidationError):
+            question.clean()
+
+    def test_lofensivo_pass_by_words(self):
+        self.login()
+        question = Question(desc='Esta descripcion no contiene lenguaje ofensivo')
+        question.clean()
+        self.assertEqual(question.desc, 'Esta descripcion no contiene lenguaje ofensivo')
+
+    def test_lofensivo_pass_by_percentage(self):
+        self.login()
+        question = Question(desc='Esta descripcion contiene solo una palabra ofensiva, tonto, pero se necesita que el 20 por ciento sean palabras ofensivas')
+        question.clean()
+        self.assertEqual(question.desc, 'Esta descripcion contiene solo una palabra ofensiva, tonto, pero se necesita que el 20 por ciento sean palabras ofensivas')
+        
+
 
     def test_create_voting_from_api(self):
         data = {'name': 'Example'}
