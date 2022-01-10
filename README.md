@@ -2,6 +2,8 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/06c453c2aba8409d8c5fbf354704fd65)](https://www.codacy.com/gh/Penyagolosa-3/Decide/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Penyagolosa-3/Decide&amp;utm_campaign=Badge_Grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/06c453c2aba8409d8c5fbf354704fd65)](https://www.codacy.com/gh/Penyagolosa-3/Decide/dashboard?utm_source=github.com&utm_medium=referral&utm_content=Penyagolosa-3/Decide&utm_campaign=Badge_Coverage)
 
+[![Python application](https://github.com/Decide-part-Penyagolosa/Decide/actions/workflows/django.yml/badge.svg?branch=deploy)](https://github.com/Decide-part-Penyagolosa/Decide/actions/workflows/django.yml)
+
 Plataforma voto electrónico educativa
 =====================================
 

@@ -18,7 +18,10 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework_swagger.views import get_swagger_view
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
 from visualizer.views import TelegramBot
+from django.views.generic import TemplateView
 
 schema_view = get_swagger_view(title='Decide API')
 
@@ -34,3 +37,4 @@ for module in settings.MODULES:
     urlpatterns += [
         path('{}/'.format(module), include('{}.urls'.format(module)))
     ]
+    urlpatterns+= staticfiles_urlpatterns()
