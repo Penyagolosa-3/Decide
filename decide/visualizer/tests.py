@@ -23,7 +23,7 @@ from booth.models import VotingCount
 from django.utils import timezone
 
 class AdminTestCase(StaticLiveServerTestCase):
-
+    #Inicializamos datos del test
     def setUp(self):
         self.base = BaseTestCase()
         self.base.setUp()
