@@ -13,7 +13,7 @@ MODULES = [
     'voting',
 ]
 
-BASEURL = 'http://localhost:8000'
+BASEURL = 'https://decide-penyagolosa.herokuapp.com'
 
 APIS = {
     'authentication': BASEURL,
@@ -24,7 +24,7 @@ APIS = {
     'postproc': BASEURL,
     'store': BASEURL,
     'visualizer': BASEURL,
-    'voting': BASEURL
+    'voting': BASEURL,
 }
 
 DATABASES = {
